@@ -160,8 +160,8 @@ const Contacto = () => {
                 <div>
                   <h3 className="font-elegant font-semibold mb-1">Ubicación</h3>
                   <p className="text-muted-foreground">
-                    Av. Las Condes 123<br />
-                    Las Condes, Santiago
+                    Av. Defensor Sporting<br />
+                    Montevideo, Uruguay
                   </p>
                 </div>
               </div>
