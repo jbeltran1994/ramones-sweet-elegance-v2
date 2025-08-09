@@ -17,24 +17,7 @@ const Catalogo = () => {
         </div>
 
         {/* Lista de Productos */}
-        <div className="mb-12">
-          <ProductList />
-        </div>
-
-        {/* Coming Soon */}
-        <div className="text-center py-20">
-          <div className="bg-gradient-card rounded-lg shadow-elegant p-12 max-w-md mx-auto">
-            <h2 className="text-2xl font-luxury font-semibold mb-4 text-foreground">
-              Próximamente
-            </h2>
-            <p className="text-muted-foreground font-elegant mb-6">
-              Estamos preparando algo especial para ti. Nuestro catálogo completo estará disponible muy pronto.
-            </p>
-            <div className="animate-float">
-              <span className="text-4xl">🧁</span>
-            </div>
-          </div>
-        </div>
+        <ProductList />
       </div>
     </div>
   );
