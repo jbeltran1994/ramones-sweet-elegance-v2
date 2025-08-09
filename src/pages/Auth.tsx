@@ -12,6 +12,8 @@ const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [telefono, setTelefono] = useState('');
   const [loading, setLoading] = useState(false);
   const { signIn, signUp, user } = useAuth();
   const { toast } = useToast();
@@ -35,6 +37,15 @@ const Auth = () => {
       return;
     }
 
+    if (!isLogin && (!nombre || !telefono)) {
+      toast({
+        title: "Error", 
+        description: "Por favor completa nombre y teléfono para crear tu cuenta",
+        variant: "destructive"
+      });
+      return;
+    }
+
     if (password.length < 6) {
       toast({
         title: "Error",
@@ -49,7 +60,7 @@ const Auth = () => {
     try {
       const { error } = isLogin 
         ? await signIn(email, password)
-        : await signUp(email, password);
+        : await signUp(email, password, nombre, telefono);
 
       if (error) {
         let errorMessage = "Ocurrió un error. Intenta nuevamente.";
@@ -116,6 +127,36 @@ const Auth = () => {
                   required
                 />
               </div>
+
+              {!isLogin && (
+                <>
+                  <div>
+                    <Label htmlFor="nombre">Nombre completo</Label>
+                    <Input
+                      id="nombre"
+                      type="text"
+                      value={nombre}
+                      onChange={(e) => setNombre(e.target.value)}
+                      placeholder="Tu nombre completo"
+                      className="bg-background/50"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="telefono">Teléfono</Label>
+                    <Input
+                      id="telefono"
+                      type="tel"
+                      value={telefono}
+                      onChange={(e) => setTelefono(e.target.value)}
+                      placeholder="+34 123 456 789"
+                      className="bg-background/50"
+                      required
+                    />
+                  </div>
+                </>
+              )}
 
               <div>
                 <Label htmlFor="password">Contraseña</Label>

@@ -6,7 +6,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUp: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, nombre: string, telefono: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
@@ -38,17 +38,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (email: string, password: string, nombre: string, telefono: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    // Crear el usuario en auth
+    const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: redirectUrl
       }
     });
-    return { error };
+
+    if (authError) {
+      return { error: authError };
+    }
+
+    // Si el usuario se creó exitosamente, crear el registro en la tabla usuarios
+    if (data.user) {
+      const { error: profileError } = await supabase
+        .from('usuarios')
+        .insert([{
+          email: email,
+          nombre: nombre,
+          telefono: telefono,
+          auth_id: data.user.id
+        }]);
+
+      if (profileError) {
+        console.error('Error creating user profile:', profileError);
+        // No retornamos el error de perfil como fatal, ya que el usuario se creó
+      }
+    }
+
+    return { error: authError };
   };
 
   const signIn = async (email: string, password: string) => {
