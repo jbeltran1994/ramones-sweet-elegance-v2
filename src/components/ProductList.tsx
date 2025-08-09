@@ -85,10 +85,7 @@ const ProductList = () => {
   }
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('es-ES', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(price);
+    return `$${price.toFixed(2)}`;
   };
 
   return (
