@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import SupabaseDiagnostic from "@/components/SupabaseDiagnostic";
+import ProductList from "@/components/ProductList";
 
 const Catalogo = () => {
   return (
@@ -16,7 +17,10 @@ const Catalogo = () => {
           </p>
         </div>
 
-        {/* Panel de Diagnóstico Supabase */}
+        {/* Lista de Productos */}
+        <div className="mb-12">
+          <ProductList />
+        </div>
         <div className="mb-12">
           <SupabaseDiagnostic />
         </div>
