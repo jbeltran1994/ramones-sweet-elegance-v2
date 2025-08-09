@@ -14,7 +14,140 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      items_pedido: {
+        Row: {
+          cantidad: number
+          id: number
+          pedido_id: number
+          precio_unitario: number
+          producto_id: number
+        }
+        Insert: {
+          cantidad: number
+          id?: number
+          pedido_id: number
+          precio_unitario: number
+          producto_id: number
+        }
+        Update: {
+          cantidad?: number
+          id?: number
+          pedido_id?: number
+          precio_unitario?: number
+          producto_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "items_pedido_pedido_id_fkey"
+            columns: ["pedido_id"]
+            isOneToOne: false
+            referencedRelation: "pedidos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "items_pedido_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pedidos: {
+        Row: {
+          cliente_email: string | null
+          cliente_nombre: string
+          cliente_telefono: string | null
+          estado: string
+          fecha_creacion: string
+          id: number
+          total: number
+          user_id: number | null
+        }
+        Insert: {
+          cliente_email?: string | null
+          cliente_nombre: string
+          cliente_telefono?: string | null
+          estado?: string
+          fecha_creacion?: string
+          id?: number
+          total?: number
+          user_id?: number | null
+        }
+        Update: {
+          cliente_email?: string | null
+          cliente_nombre?: string
+          cliente_telefono?: string | null
+          estado?: string
+          fecha_creacion?: string
+          id?: number
+          total?: number
+          user_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pedidos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      productos: {
+        Row: {
+          activo: boolean
+          categoria: string | null
+          descripcion: string | null
+          id: number
+          imagen_url: string | null
+          nombre: string
+          precio: number
+        }
+        Insert: {
+          activo?: boolean
+          categoria?: string | null
+          descripcion?: string | null
+          id?: number
+          imagen_url?: string | null
+          nombre: string
+          precio: number
+        }
+        Update: {
+          activo?: boolean
+          categoria?: string | null
+          descripcion?: string | null
+          id?: number
+          imagen_url?: string | null
+          nombre?: string
+          precio?: number
+        }
+        Relationships: []
+      }
+      usuarios: {
+        Row: {
+          email: string
+          fecha_registro: string
+          id: number
+          nombre: string
+          telefono: string | null
+        }
+        Insert: {
+          email: string
+          fecha_registro?: string
+          id?: number
+          nombre: string
+          telefono?: string | null
+        }
+        Update: {
+          email?: string
+          fecha_registro?: string
+          id?: number
+          nombre?: string
+          telefono?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
