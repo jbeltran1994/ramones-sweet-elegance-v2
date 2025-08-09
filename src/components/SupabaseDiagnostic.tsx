@@ -106,10 +106,16 @@ const SupabaseDiagnostic = () => {
 
     // 3. Prueba de escritura
     try {
+      // Obtener el usuario actual si está autenticado
+      const { data: { user } } = await supabase.auth.getUser();
+      
       const testUser = {
         email: `test.${Date.now()}@example.com`,
         nombre: 'Usuario de Prueba',
-        telefono: '+34123456789'
+        telefono: '+34123456789',
+        auth_id: user?.id || null, // Incluir auth_id si hay usuario autenticado
+        // fecha_registro se auto-genera con now()
+        // id se auto-genera
       };
 
       const { data, error } = await supabase
