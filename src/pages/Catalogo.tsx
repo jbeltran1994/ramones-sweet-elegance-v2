@@ -1,4 +1,5 @@
 import Navigation from "@/components/Navigation";
+import SupabaseDiagnostic from "@/components/SupabaseDiagnostic";
 
 const Catalogo = () => {
   return (
@@ -13,6 +14,11 @@ const Catalogo = () => {
             Descubre nuestra exquisita selección de postres artesanales, 
             creados con ingredientes premium y técnicas francesas tradicionales.
           </p>
+        </div>
+
+        {/* Panel de Diagnóstico Supabase */}
+        <div className="mb-12">
+          <SupabaseDiagnostic />
         </div>
 
         {/* Coming Soon */}
