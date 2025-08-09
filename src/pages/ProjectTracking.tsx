@@ -1,3 +1,4 @@
+
 import Navigation from "@/components/Navigation";
 import SupabaseDiagnostic from "@/components/SupabaseDiagnostic";
 import { Card } from "@/components/ui/card";
@@ -6,6 +7,12 @@ import { CheckCircle, Clock, AlertCircle, Users, Target, FileText } from "lucide
 
 const ProjectTracking = () => {
   const decisions = [
+    {
+      date: "2024-01-15",
+      title: "Implementación completa del sistema de usuarios",
+      description: "Se desarrolló un sistema robusto de creación de usuarios que integra auth.users de Supabase con la tabla usuarios personalizada, incluyendo validaciones y manejo de errores.",
+      status: "implemented"
+    },
     {
       date: "2024-01-15",
       title: "Selección de paleta de colores premium",
@@ -29,6 +36,20 @@ const ProjectTracking = () => {
   const issues = [
     {
       date: "2024-01-15",
+      title: "Políticas RLS impidiendo escritura en tabla usuarios",
+      description: "Las políticas de Row Level Security eran muy restrictivas e impedían que usuarios anónimos y autenticados crearan registros en la tabla usuarios",
+      resolution: "Se actualizaron las políticas RLS para permitir tanto usuarios autenticados como anónimos insertar registros, y se habilitó la creación de perfiles completos",
+      status: "resolved"
+    },
+    {
+      date: "2024-01-15",
+      title: "Formulario de registro incompleto",
+      description: "El formulario de Auth.tsx no capturaba todos los campos necesarios (nombre, teléfono) para crear un registro completo en la tabla usuarios",
+      resolution: "Se agregaron campos nombre y teléfono al formulario de registro y se actualizó la función signUp para crear registros completos",
+      status: "resolved"
+    },
+    {
+      date: "2024-01-15",
       title: "Error en variante de botón 'premium'",
       description: "TypeScript error por variante no definida en buttonVariants",
       resolution: "Agregada variante 'premium' y 'hero' al sistema de botones",
@@ -37,6 +58,13 @@ const ProjectTracking = () => {
   ];
 
   const stakeholderRequests = [
+    {
+      date: "2024-01-15",
+      priority: "high",
+      request: "Sistema completo de usuarios con autenticación",
+      details: "Registro, login, persistencia de sesión, y almacenamiento de datos de perfil en base de datos",
+      status: "completed"
+    },
     {
       date: "2024-01-15",
       priority: "high",
@@ -68,14 +96,16 @@ const ProjectTracking = () => {
         "✅ Sistema de diseño premium",
         "✅ Navegación responsive", 
         "✅ Páginas base (Home, Contacto)",
-        "✅ Seguimiento del proyecto"
+        "✅ Seguimiento del proyecto",
+        "✅ Integración completa con Supabase",
+        "✅ Sistema de autenticación y usuarios"
       ]
     },
     {
       phase: "Fase 2 - Core Features",
-      status: "pending",
+      status: "in-progress",
       items: [
-        "🔄 Integración con Supabase",
+        "✅ Panel de diagnóstico Supabase",
         "🔄 Sistema de productos y catálogo",
         "🔄 Carrito de compras persistente",
         "🔄 Flujo de checkout"
@@ -85,10 +115,10 @@ const ProjectTracking = () => {
       phase: "Fase 3 - Advanced",
       status: "pending", 
       items: [
-        "⏳ Sistema de usuarios opcional",
-        "⏳ Gestión de pedidos",
+        "⏳ Gestión de pedidos para usuarios",
         "⏳ Panel administrativo",
-        "⏳ Notificaciones y seguimiento"
+        "⏳ Notificaciones y seguimiento",
+        "⏳ Optimizaciones de rendimiento"
       ]
     }
   ];
