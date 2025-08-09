@@ -30,6 +30,24 @@ const ProjectTracking = () => {
       title: "Navegación responsive con mobile-first",
       description: "Implementación de navegación adaptativa con menú hamburguesa para dispositivos móviles.",
       status: "implemented"
+    },
+    {
+      date: "2024-08-09",
+      title: "Optimización de diseño del catálogo de productos",
+      description: "Se eliminó el atributo ID visible en las tarjetas de productos para un diseño más limpio y enfocado en la experiencia del usuario.",
+      status: "implemented"
+    },
+    {
+      date: "2024-08-09",
+      title: "Eliminación de sección 'Próximamente'",
+      description: "Se removió la sección 'Próximamente...' del catálogo para mostrar únicamente contenido real y disponible.",
+      status: "implemented"
+    },
+    {
+      date: "2024-08-09",
+      title: "Actualización del formato de moneda",
+      description: "Se cambió el formato de precios para mostrar el símbolo '$' a la izquierda del valor en lugar del formato EUR, mejorando la claridad visual.",
+      status: "implemented"
     }
   ];
 
