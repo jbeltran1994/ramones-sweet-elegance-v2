@@ -1,4 +1,5 @@
 import Navigation from "@/components/Navigation";
+import SupabaseDiagnostic from "@/components/SupabaseDiagnostic";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, AlertCircle, Users, Target, FileText } from "lucide-react";
@@ -229,6 +230,11 @@ const ProjectTracking = () => {
                 </div>
               ))}
             </div>
+          </Card>
+
+          {/* Supabase Diagnostic */}
+          <Card className="p-6 bg-gradient-card shadow-elegant">
+            <SupabaseDiagnostic />
           </Card>
         </div>
       </div>

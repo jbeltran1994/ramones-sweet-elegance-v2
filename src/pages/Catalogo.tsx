@@ -1,5 +1,4 @@
 import Navigation from "@/components/Navigation";
-import SupabaseDiagnostic from "@/components/SupabaseDiagnostic";
 import ProductList from "@/components/ProductList";
 
 const Catalogo = () => {
@@ -20,9 +19,6 @@ const Catalogo = () => {
         {/* Lista de Productos */}
         <div className="mb-12">
           <ProductList />
-        </div>
-        <div className="mb-12">
-          <SupabaseDiagnostic />
         </div>
 
         {/* Coming Soon */}
