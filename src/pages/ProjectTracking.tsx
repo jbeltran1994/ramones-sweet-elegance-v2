@@ -6,48 +6,87 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, AlertCircle, Users, Target, FileText } from "lucide-react";
 
 const ProjectTracking = () => {
+  // ============== DECISIONES TÉCNICAS Y CAMBIOS ==============
   const decisions = [
+    // === FASE INICIAL - FUNDACIÓN (2024-01-15) ===
     {
       date: "2024-01-15",
       title: "Implementación completa del sistema de usuarios",
       description: "Se desarrolló un sistema robusto de creación de usuarios que integra auth.users de Supabase con la tabla usuarios personalizada, incluyendo validaciones y manejo de errores.",
-      status: "implemented"
+      status: "implemented",
+      phase: "foundation"
     },
     {
       date: "2024-01-15",
       title: "Selección de paleta de colores premium",
       description: "Se adoptó una paleta pastel con rosa dorado, lavanda y champagne para transmitir elegancia y lujo.",
-      status: "implemented"
+      status: "implemented",
+      phase: "foundation"
     },
     {
       date: "2024-01-15", 
       title: "Arquitectura de componentes modulares",
       description: "Sistema de diseño centralizado en index.css y tailwind.config.ts para consistencia visual.",
-      status: "implemented"
+      status: "implemented",
+      phase: "foundation"
     },
     {
       date: "2024-01-15",
       title: "Navegación responsive con mobile-first",
       description: "Implementación de navegación adaptativa con menú hamburguesa para dispositivos móviles.",
-      status: "implemented"
+      status: "implemented",
+      phase: "foundation"
+    },
+    
+    // === OPTIMIZACIONES DEL CATÁLOGO (2024-08-09) ===
+    {
+      date: "2024-08-09",
+      title: "Sistema completo de carrito de compras",
+      description: "Implementación de hook useCart con persistencia en localStorage, gestión de estado optimizada con useReducer, y componentes modulares (CartIcon, MiniCart, ProductCardControls).",
+      status: "implemented",
+      phase: "core-features"
+    },
+    {
+      date: "2024-08-09",
+      title: "Componentes de productos interactivos",
+      description: "Desarrollo de ProductCardControls con funcionalidad completa de agregar/incrementar/decrementar productos, validaciones de stock y estados deshabilitados.",
+      status: "implemented",
+      phase: "core-features"
+    },
+    {
+      date: "2024-08-09",
+      title: "Mini carrito lateral con Sheet",
+      description: "Implementación de MiniCart como sheet lateral con lista completa de productos, cálculos de totales, y funciones de eliminar/vaciar carrito.",
+      status: "implemented",
+      phase: "core-features"
     },
     {
       date: "2024-08-09",
       title: "Optimización de diseño del catálogo de productos",
       description: "Se eliminó el atributo ID visible en las tarjetas de productos para un diseño más limpio y enfocado en la experiencia del usuario.",
-      status: "implemented"
+      status: "implemented",
+      phase: "core-features"
     },
     {
       date: "2024-08-09",
       title: "Eliminación de sección 'Próximamente'",
       description: "Se removió la sección 'Próximamente...' del catálogo para mostrar únicamente contenido real y disponible.",
-      status: "implemented"
+      status: "implemented",
+      phase: "core-features"
     },
     {
       date: "2024-08-09",
       title: "Actualización del formato de moneda",
       description: "Se cambió el formato de precios para mostrar el símbolo '$' a la izquierda del valor en lugar del formato EUR, mejorando la claridad visual.",
-      status: "implemented"
+      status: "implemented",
+      phase: "core-features"
+    },
+    {
+      date: "2024-08-09",
+      title: "Integración completa del sistema de productos",
+      description: "Conexión exitosa con la tabla 'productos' de Supabase, con manejo de estados de carga, errores y filtrado de productos activos.",
+      status: "implemented",
+      phase: "core-features"
     }
   ];
 
@@ -75,6 +114,7 @@ const ProjectTracking = () => {
     }
   ];
 
+  // ============== REQUISITOS DEL STAKEHOLDER ==============
   const stakeholderRequests = [
     {
       date: "2024-01-15",
@@ -84,10 +124,24 @@ const ProjectTracking = () => {
       status: "completed"
     },
     {
+      date: "2024-08-09",
+      priority: "high",
+      request: "Sistema de carrito de compras funcional",
+      details: "Carrito persistente con localStorage, agregar/quitar productos, mini carrito lateral, integración con catálogo",
+      status: "completed"
+    },
+    {
       date: "2024-01-15",
       priority: "high",
+      request: "Catálogo de productos desde base de datos",
+      details: "Conexión con Supabase, mostrar productos activos, imágenes, precios, categorías",
+      status: "completed"
+    },
+    {
+      date: "2024-01-15",
+      priority: "medium",
       request: "Aplicación web para boutique de postres premium",
-      details: "Catálogo de productos, carrito, checkout sin pagos, registro de pedidos en BD",
+      details: "E-commerce completo con checkout sin pagos, registro de pedidos en BD",
       status: "in-progress"
     },
     {
@@ -106,40 +160,98 @@ const ProjectTracking = () => {
     }
   ];
 
+  // ============== ANÁLISIS DE FASES Y ROADMAP ==============
   const roadmap = [
     {
       phase: "Fase 1 - Fundación",
       status: "completed",
+      completionPercentage: 100,
+      startDate: "2024-01-15",
+      endDate: "2024-01-15",
       items: [
-        "✅ Sistema de diseño premium",
-        "✅ Navegación responsive", 
-        "✅ Páginas base (Home, Contacto)",
-        "✅ Seguimiento del proyecto",
+        "✅ Sistema de diseño premium (colores pastel, gradientes, tokens semánticos)",
+        "✅ Navegación responsive con menú hamburguesa", 
+        "✅ Páginas base (Home, Contacto, Catálogo)",
+        "✅ Seguimiento del proyecto (página de tracking)",
         "✅ Integración completa con Supabase",
-        "✅ Sistema de autenticación y usuarios"
+        "✅ Sistema de autenticación y usuarios completo",
+        "✅ Configuración de TypeScript y ESLint",
+        "✅ Componentes UI base con shadcn/ui"
       ]
     },
     {
       phase: "Fase 2 - Core Features",
-      status: "in-progress",
+      status: "completed",
+      completionPercentage: 100,
+      startDate: "2024-08-09",
+      endDate: "2024-08-09",
       items: [
         "✅ Panel de diagnóstico Supabase",
-        "🔄 Sistema de productos y catálogo",
-        "🔄 Carrito de compras persistente",
-        "🔄 Flujo de checkout"
+        "✅ Sistema de productos y catálogo (conectado a BD)",
+        "✅ Carrito de compras persistente (useCart hook)",
+        "✅ Componentes modulares de carrito (CartIcon, MiniCart, ProductCardControls)",
+        "✅ Persistencia en localStorage",
+        "✅ Gestión de estado con useReducer",
+        "✅ Validaciones de stock y límites de cantidad",
+        "✅ Sheet lateral para mini carrito",
+        "✅ Formateo de precios optimizado (símbolo $ a la izquierda)"
       ]
     },
     {
-      phase: "Fase 3 - Advanced",
-      status: "pending", 
+      phase: "Fase 3 - Checkout y Pedidos",
+      status: "pending",
+      completionPercentage: 0,
+      startDate: "TBD",
+      endDate: "TBD", 
+      items: [
+        "⏳ Página de checkout dedicada",
+        "⏳ Formulario de datos del cliente",
+        "⏳ Validación de pedidos",
+        "⏳ Integración con tabla 'pedidos'",
+        "⏳ Confirmación de pedidos",
+        "⏳ Envío de notificaciones"
+      ]
+    },
+    {
+      phase: "Fase 4 - Gestión Avanzada",
+      status: "pending",
+      completionPercentage: 0,
+      startDate: "TBD",
+      endDate: "TBD",
       items: [
         "⏳ Gestión de pedidos para usuarios",
         "⏳ Panel administrativo",
-        "⏳ Notificaciones y seguimiento",
+        "⏳ Historial de compras",
+        "⏳ Sistema de notificaciones",
+        "⏳ Reportes y analytics",
         "⏳ Optimizaciones de rendimiento"
       ]
     }
   ];
+
+  // ============== ESTADO ACTUAL DEL PROYECTO ==============
+  const projectStatus = {
+    totalPhases: roadmap.length,
+    completedPhases: roadmap.filter(p => p.status === 'completed').length,
+    overallProgress: Math.round(
+      roadmap.reduce((acc, phase) => acc + phase.completionPercentage, 0) / roadmap.length
+    ),
+    activeFeatures: [
+      "Sistema de autenticación completo",
+      "Catálogo de productos funcional", 
+      "Carrito de compras persistente",
+      "Mini carrito lateral",
+      "Componentes modulares"
+    ],
+    technicalStack: [
+      "React 18 + TypeScript",
+      "Vite (bundler)",
+      "Supabase (backend)",
+      "Tailwind CSS + shadcn/ui",
+      "React Router DOM",
+      "React Hook Form + Zod"
+    ]
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -182,6 +294,54 @@ const ProjectTracking = () => {
         </div>
 
         <div className="grid gap-8">
+          {/* Project Status Overview */}
+          <Card className="p-6 bg-gradient-card shadow-elegant">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-luxury font-semibold mb-4">Estado General del Proyecto</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-primary mb-2">{projectStatus.overallProgress}%</div>
+                  <p className="text-sm text-muted-foreground">Progreso General</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-primary mb-2">
+                    {projectStatus.completedPhases}/{projectStatus.totalPhases}
+                  </div>
+                  <p className="text-sm text-muted-foreground">Fases Completadas</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-primary mb-2">{projectStatus.activeFeatures.length}</div>
+                  <p className="text-sm text-muted-foreground">Funcionalidades Activas</p>
+                </div>
+              </div>
+              
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="font-semibold mb-3">Funcionalidades Activas</h3>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    {projectStatus.activeFeatures.map((feature, index) => (
+                      <li key={index} className="flex items-center">
+                        <CheckCircle className="h-3 w-3 text-green-500 mr-2" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-3">Stack Tecnológico</h3>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    {projectStatus.technicalStack.map((tech, index) => (
+                      <li key={index} className="flex items-center">
+                        <div className="h-2 w-2 bg-primary rounded-full mr-2" />
+                        {tech}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </Card>
+
           {/* Decisions & Changes */}
           <Card className="p-6 bg-gradient-card shadow-elegant">
             <div className="flex items-center mb-6">
@@ -259,15 +419,34 @@ const ProjectTracking = () => {
           <Card className="p-6 bg-gradient-card shadow-elegant">
             <div className="flex items-center mb-6">
               <FileText className="h-6 w-6 text-primary mr-3" />
-              <h2 className="text-2xl font-luxury font-semibold">Roadmap - Próximos Pasos</h2>
+              <h2 className="text-2xl font-luxury font-semibold">Roadmap y Análisis de Fases</h2>
             </div>
             <div className="space-y-6">
               {roadmap.map((phase, index) => (
                 <div key={index} className="border rounded-lg p-4 bg-background/50">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-elegant font-semibold text-lg">{phase.phase}</h3>
-                    {getStatusBadge(phase.status)}
+                    <div className="flex items-center space-x-3">
+                      <h3 className="font-elegant font-semibold text-lg">{phase.phase}</h3>
+                      <div className="text-sm text-muted-foreground">
+                        {phase.completionPercentage}% completado
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      {getStatusBadge(phase.status)}
+                      <Badge variant="outline" className="text-xs">
+                        {phase.startDate} - {phase.endDate}
+                      </Badge>
+                    </div>
                   </div>
+                  
+                  {/* Progress bar */}
+                  <div className="w-full bg-muted rounded-full h-2 mb-3">
+                    <div 
+                      className="bg-primary h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${phase.completionPercentage}%` }}
+                    />
+                  </div>
+                  
                   <ul className="space-y-1">
                     {phase.items.map((item, itemIndex) => (
                       <li key={itemIndex} className="text-sm text-muted-foreground font-mono">
