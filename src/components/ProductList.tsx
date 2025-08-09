@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Package, AlertCircle } from 'lucide-react';
+import ProductCardControls from '@/components/cart/ProductCardControls';
 
 interface Producto {
   id: number;
@@ -137,7 +138,7 @@ const ProductList = () => {
               )}
             </CardContent>
             
-            <CardFooter className="p-4 pt-0">
+            <CardFooter className="p-4 pt-0 space-y-3">
               <div className="w-full flex items-center justify-between">
                 <span className="text-2xl font-bold text-primary">
                   {formatPrice(producto.precio)}
@@ -146,6 +147,9 @@ const ProductList = () => {
                   ID: {producto.id}
                 </Badge>
               </div>
+              
+              {/* Controles de carrito */}
+              <ProductCardControls producto={producto} />
             </CardFooter>
           </Card>
         ))}

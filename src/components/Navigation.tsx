@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ShoppingBag, User, Heart, LogOut } from "lucide-react";
+import { Menu, User, Heart, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import MiniCart from "@/components/cart/MiniCart";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,13 +74,8 @@ const Navigation = () => {
               </Link>
             )}
             
-            <Button variant="premium" size="sm" className="relative">
-              <ShoppingBag className="h-4 w-4 mr-2" />
-              Carrito
-              <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                0
-              </span>
-            </Button>
+            {/* Carrito */}
+            <MiniCart />
 
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
