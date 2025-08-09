@@ -139,13 +139,10 @@ const ProductList = () => {
             </CardContent>
             
             <CardFooter className="p-4 pt-0 space-y-3">
-              <div className="w-full flex items-center justify-between">
+              <div className="w-full flex items-center justify-center">
                 <span className="text-2xl font-bold text-primary">
                   {formatPrice(producto.precio)}
                 </span>
-                <Badge variant="outline" className="text-xs">
-                  ID: {producto.id}
-                </Badge>
               </div>
               
               {/* Controles de carrito */}
