@@ -182,7 +182,7 @@ const Contacto = () => {
                 <Mail className="h-5 w-5 text-primary mt-1" />
                 <div>
                   <h3 className="font-elegant font-semibold mb-1">Email</h3>
-                  <p className="text-muted-foreground">hola@ramones.cl</p>
+                  <p className="text-muted-foreground">hola@ramones.uy</p>
                 </div>
               </div>
             </Card>
