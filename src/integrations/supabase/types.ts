@@ -38,6 +38,20 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "fk_items_pedido_pedido"
+            columns: ["pedido_id"]
+            isOneToOne: false
+            referencedRelation: "pedidos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_items_pedido_producto"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "items_pedido_pedido_id_fkey"
             columns: ["pedido_id"]
             isOneToOne: false
@@ -55,6 +69,7 @@ export type Database = {
       }
       pedidos: {
         Row: {
+          auth_user_id: string | null
           cliente_email: string | null
           cliente_nombre: string
           cliente_telefono: string | null
@@ -65,6 +80,7 @@ export type Database = {
           user_id: number | null
         }
         Insert: {
+          auth_user_id?: string | null
           cliente_email?: string | null
           cliente_nombre: string
           cliente_telefono?: string | null
@@ -75,6 +91,7 @@ export type Database = {
           user_id?: number | null
         }
         Update: {
+          auth_user_id?: string | null
           cliente_email?: string | null
           cliente_nombre?: string
           cliente_telefono?: string | null
@@ -126,6 +143,7 @@ export type Database = {
       }
       usuarios: {
         Row: {
+          auth_id: string | null
           email: string
           fecha_registro: string
           id: number
@@ -133,6 +151,7 @@ export type Database = {
           telefono: string | null
         }
         Insert: {
+          auth_id?: string | null
           email: string
           fecha_registro?: string
           id?: number
@@ -140,6 +159,7 @@ export type Database = {
           telefono?: string | null
         }
         Update: {
+          auth_id?: string | null
           email?: string
           fecha_registro?: string
           id?: number

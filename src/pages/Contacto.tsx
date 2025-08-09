@@ -3,9 +3,76 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { contactFormSchema, type ContactFormData } from "@/lib/validations";
 
 const Contacto = () => {
+  const [formData, setFormData] = useState<ContactFormData>({
+    nombre: '',
+    telefono: '',
+    email: '',
+    mensaje: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const handleInputChange = (field: keyof ContactFormData) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: e.target.value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // Validate form data
+      const validatedData = contactFormSchema.parse(formData);
+      
+      // Here you would normally send the data to your backend
+      // For now, we'll just show a success message
+      console.log('Contact form data:', validatedData);
+      
+      toast({
+        title: "¡Mensaje enviado!",
+        description: "Gracias por contactarnos. Te responderemos pronto.",
+      });
+      
+      // Reset form
+      setFormData({
+        nombre: '',
+        telefono: '',
+        email: '',
+        mensaje: ''
+      });
+    } catch (error: any) {
+      if (error.errors) {
+        // Show validation errors
+        const firstError = error.errors[0];
+        toast({
+          title: "Error en el formulario",
+          description: firstError.message,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Hubo un problema al enviar el mensaje. Intenta nuevamente.",
+          variant: "destructive"
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -25,31 +92,62 @@ const Contacto = () => {
           {/* Contact Form */}
           <Card className="p-8 bg-gradient-card shadow-elegant">
             <h2 className="text-2xl font-luxury font-semibold mb-6">Envíanos un mensaje</h2>
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-elegant font-medium mb-2">Nombre</label>
-                  <Input placeholder="Tu nombre" className="bg-background/50" />
+                  <Label htmlFor="nombre" className="text-sm font-elegant font-medium">Nombre</Label>
+                  <Input 
+                    id="nombre"
+                    placeholder="Tu nombre" 
+                    className="bg-background/50"
+                    value={formData.nombre}
+                    onChange={handleInputChange('nombre')}
+                    required
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-elegant font-medium mb-2">Teléfono</label>
-                  <Input placeholder="Tu teléfono" className="bg-background/50" />
+                  <Label htmlFor="telefono" className="text-sm font-elegant font-medium">Teléfono</Label>
+                  <Input 
+                    id="telefono"
+                    placeholder="Tu teléfono" 
+                    className="bg-background/50"
+                    value={formData.telefono}
+                    onChange={handleInputChange('telefono')}
+                    required
+                  />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-elegant font-medium mb-2">Email</label>
-                <Input type="email" placeholder="tu@email.com" className="bg-background/50" />
+                <Label htmlFor="email" className="text-sm font-elegant font-medium">Email</Label>
+                <Input 
+                  id="email"
+                  type="email" 
+                  placeholder="tu@email.com" 
+                  className="bg-background/50"
+                  value={formData.email}
+                  onChange={handleInputChange('email')}
+                  required
+                />
               </div>
               <div>
-                <label className="block text-sm font-elegant font-medium mb-2">Mensaje</label>
+                <Label htmlFor="mensaje" className="text-sm font-elegant font-medium">Mensaje</Label>
                 <Textarea 
+                  id="mensaje"
                   placeholder="Cuéntanos sobre tu pedido especial o consulta..." 
                   rows={4}
                   className="bg-background/50"
+                  value={formData.mensaje}
+                  onChange={handleInputChange('mensaje')}
+                  required
                 />
               </div>
-              <Button variant="premium" className="w-full">
-                Enviar Mensaje
+              <Button 
+                type="submit"
+                variant="premium" 
+                className="w-full"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
               </Button>
             </form>
           </Card>
