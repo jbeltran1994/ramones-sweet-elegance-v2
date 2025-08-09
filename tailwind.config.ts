@@ -72,6 +72,7 @@ export default {
 				'gradient-hero': 'var(--gradient-hero)',
 				'gradient-card': 'var(--gradient-card)',
 				'gradient-accent': 'var(--gradient-accent)',
+				'gradient-primary': 'var(--gradient-hero)', // Usar el mismo gradiente hero como primary
 			},
 			boxShadow: {
 				'elegant': 'var(--shadow-elegant)',
