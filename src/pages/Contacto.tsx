@@ -160,7 +160,7 @@ const Contacto = () => {
                 <div>
                   <h3 className="font-elegant font-semibold mb-1">Ubicación</h3>
                   <p className="text-muted-foreground">
-                    Av. Defensor Sporting<br />
+                    Avenida Siempreviva 742<br />
                     Montevideo, Uruguay
                   </p>
                 </div>
@@ -172,7 +172,7 @@ const Contacto = () => {
                 <Phone className="h-5 w-5 text-primary mt-1" />
                 <div>
                   <h3 className="font-elegant font-semibold mb-1">Teléfono</h3>
-                  <p className="text-muted-foreground">+56 9 1234 5678</p>
+                  <p className="text-muted-foreground">+1976 87 91 08</p>
                 </div>
               </div>
             </Card>
