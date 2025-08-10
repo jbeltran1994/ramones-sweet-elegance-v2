@@ -206,6 +206,13 @@ const ProjectTracking = () => {
       description: "Creación exitosa de tabla mensajes_contacto con políticas RLS adecuadas para permitir inserción pública y gestión administrativa autenticada.",
       resolution: "Hook useContactMessages actualizado para usar integración real con Supabase, eliminados datos mock, flujo operativo completo funcionando.",
       status: "resolved"
+    },
+    {
+      date: "09/08/25",
+      title: "Error en formulario de contacto con columnas inexistentes",
+      description: "Error PGRST204: 'Could not find the auth_user_id column of mensajes_contacto in the schema cache'. El hook useContactMessages intentaba insertar campos user_id y auth_user_id que no existen en la tabla.",
+      resolution: "Se eliminaron las referencias a user_id y auth_user_id del insert, dejando solo los campos que existen en la tabla: nombre, telefono, email, mensaje, estado. Ahora permite envío de mensajes anónimos sin autenticación.",
+      status: "resolved"
     }
   ];
 
