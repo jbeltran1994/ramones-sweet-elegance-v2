@@ -8,6 +8,7 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { contactFormSchema, type ContactFormData } from "@/lib/validations";
+import { useContactMessages } from "@/hooks/useContactMessages";
 
 const Contacto = () => {
   const [formData, setFormData] = useState<ContactFormData>({
@@ -18,6 +19,7 @@ const Contacto = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const { createContactMessage } = useContactMessages();
 
   const handleInputChange = (field: keyof ContactFormData) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -36,22 +38,18 @@ const Contacto = () => {
       // Validate form data
       const validatedData = contactFormSchema.parse(formData);
       
-      // Here you would normally send the data to your backend
-      // For now, we'll just show a success message
-      console.log('Contact form data:', validatedData);
+      // Save message to database
+      const result = await createContactMessage(validatedData);
       
-      toast({
-        title: "¡Mensaje enviado!",
-        description: "Gracias por contactarnos. Te responderemos pronto.",
-      });
-      
-      // Reset form
-      setFormData({
-        nombre: '',
-        telefono: '',
-        email: '',
-        mensaje: ''
-      });
+      if (result) {
+        // Reset form only if message was saved successfully
+        setFormData({
+          nombre: '',
+          telefono: '',
+          email: '',
+          mensaje: ''
+        });
+      }
     } catch (error: any) {
       if (error.errors) {
         // Show validation errors

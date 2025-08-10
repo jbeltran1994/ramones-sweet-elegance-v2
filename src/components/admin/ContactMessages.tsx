@@ -10,60 +10,33 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Search, Eye, Check, Clock, AlertCircle, Mail, Phone, User, Calendar } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-interface ContactMessage {
-  id: number;
-  nombre: string;
-  telefono: string;
-  email: string;
-  mensaje: string;
-  estado: 'pendiente' | 'en_proceso' | 'respondido';
-  fecha_creacion: string;
-  fecha_respuesta?: string;
-  respuesta?: string;
-}
-
-// Mock data para demo
-const mockMessages: ContactMessage[] = [
-  {
-    id: 1,
-    nombre: "Ana García",
-    telefono: "+598 99 123 456",
-    email: "ana.garcia@email.com",
-    mensaje: "Hola! Quisiera hacer un pedido especial para el cumpleaños de mi hija. Necesito una torta de unicornio para 20 personas. ¿Pueden ayudarme?",
-    estado: "pendiente",
-    fecha_creacion: "2024-01-15T10:30:00Z"
-  },
-  {
-    id: 2,
-    nombre: "Carlos Rodríguez",
-    telefono: "+598 98 765 432",
-    email: "carlos.rodriguez@empresa.com",
-    mensaje: "Buenos días, necesito cotizar postres para un evento corporativo de 50 personas. ¿Qué opciones tienen disponibles?",
-    estado: "en_proceso",
-    fecha_creacion: "2024-01-14T14:15:00Z"
-  },
-  {
-    id: 3,
-    nombre: "María López",
-    telefono: "+598 97 555 333",
-    email: "maria.lopez@email.com",
-    mensaje: "¡Excelente servicio! Los postres estuvieron deliciosos en nuestra boda. Muchas gracias por todo.",
-    estado: "respondido",
-    fecha_creacion: "2024-01-13T16:45:00Z",
-    fecha_respuesta: "2024-01-13T18:30:00Z",
-    respuesta: "¡Muchas gracias María! Fue un placer ser parte de su día especial. Esperamos poder atenderlos nuevamente pronto."
-  }
-];
+import { useContactMessages, type ContactMessage } from "@/hooks/useContactMessages";
 
 const ContactMessages = () => {
-  const [messages, setMessages] = useState<ContactMessage[]>(mockMessages);
-  const [filteredMessages, setFilteredMessages] = useState<ContactMessage[]>(mockMessages);
+  const [messages, setMessages] = useState<ContactMessage[]>([]);
+  const [filteredMessages, setFilteredMessages] = useState<ContactMessage[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
   const [responseText, setResponseText] = useState("");
   const { toast } = useToast();
+  const { getContactMessages, updateMessageStatus, respondToMessage, isLoading, messages: hookMessages } = useContactMessages();
+
+  useEffect(() => {
+    loadMessages();
+  }, []);
+
+  const loadMessages = async () => {
+    const fetchedMessages = await getContactMessages();
+    setMessages(fetchedMessages);
+    setFilteredMessages(fetchedMessages);
+  };
+
+  // Also update when hook messages change
+  useEffect(() => {
+    setMessages(hookMessages);
+    setFilteredMessages(hookMessages);
+  }, [hookMessages]);
 
   useEffect(() => {
     let filtered = messages;
@@ -96,21 +69,15 @@ const ContactMessages = () => {
     }
   };
 
-  const handleStatusChange = (messageId: number, newStatus: string) => {
-    setMessages(prev =>
-      prev.map(msg =>
-        msg.id === messageId
-          ? { ...msg, estado: newStatus as ContactMessage['estado'] }
-          : msg
-      )
-    );
-    toast({
-      title: "Estado actualizado",
-      description: "El estado del mensaje ha sido actualizado correctamente.",
-    });
+  const handleStatusChange = async (messageId: number, newStatus: string) => {
+    const success = await updateMessageStatus(messageId, newStatus as ContactMessage['estado']);
+    if (success) {
+      // Reload messages to get updated data
+      loadMessages();
+    }
   };
 
-  const handleResponse = (message: ContactMessage) => {
+  const handleResponse = async (message: ContactMessage) => {
     if (!responseText.trim()) {
       toast({
         title: "Error",
@@ -120,26 +87,18 @@ const ContactMessages = () => {
       return;
     }
 
-    setMessages(prev =>
-      prev.map(msg =>
-        msg.id === message.id
-          ? {
-              ...msg,
-              estado: 'respondido',
-              fecha_respuesta: new Date().toISOString(),
-              respuesta: responseText
-            }
-          : msg
-      )
-    );
+    const success = await respondToMessage(message.id, responseText);
+    if (success) {
+      toast({
+        title: "Respuesta enviada",
+        description: `Se ha enviado la respuesta a ${message.email}`,
+      });
 
-    toast({
-      title: "Respuesta enviada",
-      description: `Se ha enviado la respuesta a ${message.email}`,
-    });
-
-    setResponseText("");
-    setSelectedMessage(null);
+      setResponseText("");
+      setSelectedMessage(null);
+      // Reload messages to get updated data
+      loadMessages();
+    }
   };
 
   const formatDate = (dateString: string) => {
