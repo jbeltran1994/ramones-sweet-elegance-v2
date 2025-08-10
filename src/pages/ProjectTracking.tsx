@@ -8,30 +8,30 @@ import { CheckCircle, Clock, AlertCircle, Users, Target, FileText, MessageSquare
 const ProjectTracking = () => {
   // ============== DECISIONES TÉCNICAS Y CAMBIOS ==============
   const decisions = [
-    // === FASE INICIAL - FUNDACIÓN (2024-01-15) ===
-    {
-      date: "2024-01-15",
+  // === FASE INICIAL - FUNDACIÓN (2025-08-09) ===
+  {
+    date: "2025-08-09",
       title: "Implementación completa del sistema de usuarios",
       description: "Se desarrolló un sistema robusto de creación de usuarios que integra auth.users de Supabase con la tabla usuarios personalizada, incluyendo validaciones y manejo de errores.",
       status: "implemented",
       phase: "foundation"
     },
     {
-      date: "2024-01-15",
+      date: "2025-08-09",
       title: "Selección de paleta de colores premium",
       description: "Se adoptó una paleta pastel con rosa dorado, lavanda y champagne para transmitir elegancia y lujo.",
       status: "implemented",
       phase: "foundation"
     },
     {
-      date: "2024-01-15", 
+      date: "2025-08-09",
       title: "Arquitectura de componentes modulares",
       description: "Sistema de diseño centralizado en index.css y tailwind.config.ts para consistencia visual.",
       status: "implemented",
       phase: "foundation"
     },
     {
-      date: "2024-01-15",
+      date: "2025-08-09",
       title: "Navegación responsive con mobile-first",
       description: "Implementación de navegación adaptativa con menú hamburguesa para dispositivos móviles.",
       status: "implemented",
@@ -145,63 +145,63 @@ const ProjectTracking = () => {
 
   const issues = [
     {
-      date: "2024-01-15",
+      date: "2025-08-09",
       title: "Políticas RLS impidiendo escritura en tabla usuarios",
       description: "Las políticas de Row Level Security eran muy restrictivas e impedían que usuarios anónimos y autenticados crearan registros en la tabla usuarios",
       resolution: "Se actualizaron las políticas RLS para permitir tanto usuarios autenticados como anónimos insertar registros, y se habilitó la creación de perfiles completos",
       status: "resolved"
     },
     {
-      date: "2024-01-15",
+      date: "2025-08-09",
       title: "Formulario de registro incompleto",
       description: "El formulario de Auth.tsx no capturaba todos los campos necesarios (nombre, teléfono) para crear un registro completo en la tabla usuarios",
       resolution: "Se agregaron campos nombre y teléfono al formulario de registro y se actualizó la función signUp para crear registros completos",
       status: "resolved"
     },
     {
-      date: "2024-01-15",
+      date: "2025-08-09",
       title: "Error en variante de botón 'premium'",
       description: "TypeScript error por variante no definida en buttonVariants",
       resolution: "Agregada variante 'premium' y 'hero' al sistema de botones",
       status: "resolved"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       title: "Error de hooks de React en ProductList",
       description: "Error 'Rendered more hooks than during the previous render' causado por hooks llamados condicionalmente después de early returns",
       resolution: "Se movieron todos los hooks (useState, useEffect, useMemo) al nivel superior del componente, antes de cualquier return condicional",
       status: "resolved"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       title: "Errores de TypeScript en useOrders",
       description: "Conflictos de tipos al intentar usar tablas 'orders' y 'order_items' que no existían en el schema de Supabase",
       resolution: "Se ajustó el hook para usar las tablas existentes 'pedidos' e 'items_pedido' con sus tipos correctos del schema",
       status: "resolved"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       title: "Error de relaciones múltiples en consultas Supabase",
       description: "Error PGRST201 por múltiples relaciones entre 'pedidos' e 'items_pedido', consultas ambiguas",
       resolution: "Se especificó la relación exacta usando 'items_pedido!fk_items_pedido_pedido' en las consultas",
       status: "resolved"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       title: "Error de Select.Item con value vacío",
       description: "Error en filtros de pedidos: Radix UI no permite value='' en Select.Item porque usa cadenas vacías para limpiar selección",
       resolution: "Se cambiaron los valores vacíos por 'all' y se ajustó la lógica de filtros para manejar estos valores",
       status: "resolved"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       title: "Error en formulario de contacto sin integración con BD",
       description: "El formulario de contacto solo mostraba mensaje de éxito pero no guardaba los datos en Supabase, gestión de mensajes usaba datos mock. Tabla 'mensajes_contacto' no existe en schema.",
       resolution: "Implementado hook useContactMessages con datos mock temporales y funcionalidad completa. TODO: Crear tabla mensajes_contacto en Supabase para integración real.",
       status: "resolved"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       title: "Tabla mensajes_contacto creada en Supabase",
       description: "Creación exitosa de tabla mensajes_contacto con políticas RLS adecuadas para permitir inserción pública y gestión administrativa autenticada.",
       resolution: "Hook useContactMessages actualizado para usar integración real con Supabase, eliminados datos mock, flujo operativo completo funcionando.",
@@ -212,70 +212,70 @@ const ProjectTracking = () => {
   // ============== REQUISITOS DEL STAKEHOLDER ==============
   const stakeholderRequests = [
     {
-      date: "2024-01-15",
+      date: "2025-08-09",
       priority: "high",
       request: "Sistema completo de usuarios con autenticación",
       details: "Registro, login, persistencia de sesión, y almacenamiento de datos de perfil en base de datos",
       status: "completed"
     },
     {
-      date: "2024-08-09",
+      date: "2025-08-09",
       priority: "high",
       request: "Sistema de carrito de compras funcional",
       details: "Carrito persistente con localStorage, agregar/quitar productos, mini carrito lateral, integración con catálogo",
       status: "completed"
     },
     {
-      date: "2024-01-15",
+      date: "2025-08-09",
       priority: "high",
       request: "Catálogo de productos desde base de datos",
       details: "Conexión con Supabase, mostrar productos activos, imágenes, precios, categorías",
       status: "completed"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       priority: "high",
       request: "Sistema de checkout y gestión de pedidos",
       details: "Formulario de checkout, creación de pedidos en BD, integración con carrito, validaciones de datos del cliente",
       status: "completed"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       priority: "high",
       request: "Panel administrativo de gestión con funcionalidades convenientes",
       details: "Dashboard con métricas, gestión de productos (CRUD), gestión de pedidos con cambio de estados, gestión de usuarios y reportes de analytics",
       status: "completed"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       priority: "medium",
       request: "Reorganización de navegación en dropdown de Gestión Operativa",
       details: "Agrupar Panel Administrativo, Pedidos y Seguimiento en lista desplegable con título 'Gestión operativa'",
       status: "completed"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       priority: "high",
       request: "Página de visualización de pedidos",
       details: "Historial completo de pedidos con detalles de items, estado, cliente, fecha y totales",
       status: "completed"
     },
     {
-      date: "2024-01-15",
+      date: "2025-08-09",
       priority: "medium",
       request: "Aplicación web para boutique de postres premium",
       details: "E-commerce completo con checkout funcional, registro y visualización de pedidos en BD",
       status: "completed"
     },
     {
-      date: "2024-01-15",
+      date: "2025-08-09",
       priority: "medium", 
       request: "Diseño responsive elegante en colores pastel",
       details: "Sensación de lujo orientada a público ABC1",
       status: "completed"
     },
     {
-      date: "2024-01-15",
+      date: "2025-08-09",
       priority: "medium",
       request: "Seguimiento del proyecto integrado",
       details: "Sistema de tracking de decisiones, errores y roadmap",
@@ -500,7 +500,7 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       status: "completed"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       type: "enhancement",
       prompt: "en el panel de pedidos, agrega filtros por producto, estado del pedido y fecha",
       description: "Implementación de sistema de filtros avanzado para pedidos",
@@ -508,7 +508,7 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       status: "completed"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       type: "correction",
       prompt: "For the code present, I get the error below. Please think step-by-step in order to resolve it. Error: A <Select.Item /> must have a value prop that is not an empty string",
       description: "Corrección de error en componentes Select de Radix UI con valores vacíos",
@@ -516,7 +516,7 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       status: "completed"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       type: "feature",
       prompt: "Crea un panel administrativo de gestión con los features que creas convenientes y agrupa \"Panel Administrativo, pedidos y seguimiento en una lista desplegable con un titulo \"Gestión operativa\"",
       description: "Desarrollo de panel administrativo completo y reorganización de navegación",
@@ -524,7 +524,7 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       status: "completed"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       type: "feature",
       prompt: "En gestión operativa agrega un menu donde podras gestionar los mensajes enviados en el apartado contacto \"envianos un mensaje\". Actualiza seguimiento",
       description: "Implementación de gestión de mensajes de contacto con estados y respuestas",
@@ -532,7 +532,7 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       status: "completed"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       type: "database",
       prompt: "Crea una tabla en supabase para poder guardar los mensajes enviados, integra toda la información y flujo operativo para que pueda gestionar los mensajes recibidos desde \"mensajes de contacto\" de la gestión operativa",
       description: "Creación de tabla mensajes_contacto en Supabase e integración completa del flujo operativo",
@@ -540,12 +540,13 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       status: "completed"
     },
     {
-      date: "2025-01-14",
+      date: "2025-08-10",
       type: "debugging",
       prompt: "sigue habiendo un error a la hora de intentar enviar el mensaje",
-      description: "Usuario reporta error persistente en formulario de contacto después de la integración con Supabase",
-      outcome: "Agregado logging detallado para diagnosticar el problema específico. Investigando causa raíz.",
-      status: "in-progress"
+      description: "Usuario reporta error persistente en formulario de contacto. IMPLEMENTACIÓN DE LOGGING DETALLADO para debugging efectivo.",
+      outcome: "🔍 DEBUGGING CRÍTICO: Agregado sistema de logging completo (console.log) en hook y formulario para identificar causa raíz del error. Logs muestran flujo completo desde validación hasta Supabase.",
+      status: "in-progress",
+      importance: "ALTA - El logging detallado es fundamental para identificar errores en aplicaciones complejas. Sin logs apropiados, es imposible diagnosticar problemas en producción."
     }
   ];
 
