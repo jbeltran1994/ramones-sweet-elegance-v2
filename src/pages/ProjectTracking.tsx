@@ -87,6 +87,15 @@ const ProjectTracking = () => {
       description: "Conexión exitosa con la tabla 'productos' de Supabase, con manejo de estados de carga, errores y filtrado de productos activos.",
       status: "implemented",
       phase: "core-features"
+    },
+    
+    // === SISTEMA DE FILTROS (2025-01-14) ===
+    {
+      date: "2025-01-14",
+      title: "Sistema de filtros avanzado para productos",
+      description: "Implementación de filtros interactivos por categoría y rango de precios en el catálogo, con controles dinámicos que se actualizan según los productos disponibles.",
+      status: "implemented",
+      phase: "enhanced-features"
     }
   ];
 
@@ -110,6 +119,13 @@ const ProjectTracking = () => {
       title: "Error en variante de botón 'premium'",
       description: "TypeScript error por variante no definida en buttonVariants",
       resolution: "Agregada variante 'premium' y 'hero' al sistema de botones",
+      status: "resolved"
+    },
+    {
+      date: "2025-01-14",
+      title: "Error de hooks de React en ProductList",
+      description: "Error 'Rendered more hooks than during the previous render' causado por hooks llamados condicionalmente después de early returns",
+      resolution: "Se movieron todos los hooks (useState, useEffect, useMemo) al nivel superior del componente, antes de cualquier return condicional",
       status: "resolved"
     }
   ];
@@ -198,6 +214,21 @@ const ProjectTracking = () => {
       ]
     },
     {
+      phase: "Fase 2.1 - Enhanced Features",
+      status: "completed",
+      completionPercentage: 100,
+      startDate: "2025-01-14",
+      endDate: "2025-01-14",
+      items: [
+        "✅ Sistema de filtros por categoría de productos",
+        "✅ Filtros por rango de precios con slider dinámico",
+        "✅ Controles de filtros responsive",
+        "✅ Contadores de productos filtrados",
+        "✅ Función de limpieza de filtros",
+        "✅ Optimización de hooks para evitar re-renders innecesarios"
+      ]
+    },
+    {
       phase: "Fase 3 - Checkout y Pedidos",
       status: "pending",
       completionPercentage: 0,
@@ -241,7 +272,8 @@ const ProjectTracking = () => {
       "Catálogo de productos funcional", 
       "Carrito de compras persistente",
       "Mini carrito lateral",
-      "Componentes modulares"
+      "Filtros de productos por categoría y precio",
+      "Sistema de diagnóstico Supabase avanzado"
     ],
     technicalStack: [
       "React 18 + TypeScript",

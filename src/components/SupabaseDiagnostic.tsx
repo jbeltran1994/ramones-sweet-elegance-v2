@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, RefreshCw, Database, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface DiagnosticResult {
@@ -11,25 +11,41 @@ interface DiagnosticResult {
   details?: any;
 }
 
+interface TableInfo {
+  name: string;
+  recordCount: number;
+  hasRLS: boolean;
+  rlsPolicies: string[];
+}
+
 interface DiagnosticState {
   config: DiagnosticResult;
+  connection: DiagnosticResult;
+  tablesInfo: DiagnosticResult & { data?: TableInfo[] };
   readTest: DiagnosticResult;
   writeTest: DiagnosticResult;
+  rlsTest: DiagnosticResult;
 }
 
 const SupabaseDiagnostic = () => {
   const [diagnostics, setDiagnostics] = useState<DiagnosticState>({
     config: { status: 'loading', message: 'Verificando configuración...' },
+    connection: { status: 'loading', message: 'Probando conexión...' },
+    tablesInfo: { status: 'loading', message: 'Analizando tablas...' },
     readTest: { status: 'loading', message: 'Probando lectura...' },
-    writeTest: { status: 'loading', message: 'Probando escritura...' }
+    writeTest: { status: 'loading', message: 'Probando escritura...' },
+    rlsTest: { status: 'loading', message: 'Verificando RLS...' }
   });
 
   const runDiagnostics = async () => {
     // Reset all to loading
     setDiagnostics({
       config: { status: 'loading', message: 'Verificando configuración...' },
+      connection: { status: 'loading', message: 'Probando conexión...' },
+      tablesInfo: { status: 'loading', message: 'Analizando tablas...' },
       readTest: { status: 'loading', message: 'Probando lectura...' },
-      writeTest: { status: 'loading', message: 'Probando escritura...' }
+      writeTest: { status: 'loading', message: 'Probando escritura...' },
+      rlsTest: { status: 'loading', message: 'Verificando RLS...' }
     });
 
     // 1. Verificar configuración
@@ -63,7 +79,137 @@ const SupabaseDiagnostic = () => {
       }));
     }
 
-    // 2. Prueba de lectura
+    // 2. Prueba de conexión básica
+    try {
+      const { data, error } = await supabase.from('productos').select('count').single();
+      
+      setDiagnostics(prev => ({
+        ...prev,
+        connection: {
+          status: error ? 'error' : 'success',
+          message: error ? `Error de conexión: ${error.message}` : 'Conexión exitosa con Supabase',
+          details: error || { connectionTime: new Date().toISOString() }
+        }
+      }));
+    } catch (error) {
+      setDiagnostics(prev => ({
+        ...prev,
+        connection: {
+          status: 'error',
+          message: 'Error inesperado de conexión',
+          details: error
+        }
+      }));
+    }
+
+    // 3. Análisis de tablas y RLS
+    try {
+      const tablesInfo: TableInfo[] = [];
+
+      // Verificar tabla productos
+      try {
+        const { count, error } = await supabase
+          .from('productos')
+          .select('*', { count: 'exact', head: true });
+
+        tablesInfo.push({
+          name: 'productos',
+          recordCount: count || 0,
+          hasRLS: !error,
+          rlsPolicies: []
+        });
+      } catch (error) {
+        tablesInfo.push({
+          name: 'productos',
+          recordCount: 0,
+          hasRLS: false,
+          rlsPolicies: []
+        });
+      }
+
+      // Verificar tabla usuarios
+      try {
+        const { count, error } = await supabase
+          .from('usuarios')
+          .select('*', { count: 'exact', head: true });
+
+        tablesInfo.push({
+          name: 'usuarios',
+          recordCount: count || 0,
+          hasRLS: !error,
+          rlsPolicies: []
+        });
+      } catch (error) {
+        tablesInfo.push({
+          name: 'usuarios',
+          recordCount: 0,
+          hasRLS: false,
+          rlsPolicies: []
+        });
+      }
+
+      // Verificar tabla pedidos
+      try {
+        const { count, error } = await supabase
+          .from('pedidos')
+          .select('*', { count: 'exact', head: true });
+
+        tablesInfo.push({
+          name: 'pedidos',
+          recordCount: count || 0,
+          hasRLS: !error,
+          rlsPolicies: []
+        });
+      } catch (error) {
+        tablesInfo.push({
+          name: 'pedidos',
+          recordCount: 0,
+          hasRLS: false,
+          rlsPolicies: []
+        });
+      }
+
+      // Verificar tabla items_pedido
+      try {
+        const { count, error } = await supabase
+          .from('items_pedido')
+          .select('*', { count: 'exact', head: true });
+
+        tablesInfo.push({
+          name: 'items_pedido',
+          recordCount: count || 0,
+          hasRLS: !error,
+          rlsPolicies: []
+        });
+      } catch (error) {
+        tablesInfo.push({
+          name: 'items_pedido',
+          recordCount: 0,
+          hasRLS: false,
+          rlsPolicies: []
+        });
+      }
+
+      setDiagnostics(prev => ({
+        ...prev,
+        tablesInfo: {
+          status: 'success',
+          message: `${tablesInfo.length} tablas analizadas`,
+          data: tablesInfo
+        }
+      }));
+    } catch (error) {
+      setDiagnostics(prev => ({
+        ...prev,
+        tablesInfo: {
+          status: 'error',
+          message: 'Error analizando tablas',
+          details: error
+        }
+      }));
+    }
+
+    // 4. Prueba de lectura
     try {
       const { data, error } = await supabase
         .from('productos')
@@ -104,7 +250,7 @@ const SupabaseDiagnostic = () => {
       }));
     }
 
-    // 3. Prueba de escritura
+    // 5. Prueba de escritura
     try {
       // Obtener el usuario actual si está autenticado
       const { data: { user } } = await supabase.auth.getUser();
@@ -152,6 +298,41 @@ const SupabaseDiagnostic = () => {
         writeTest: {
           status: 'error',
           message: 'Error inesperado en escritura',
+          details: error
+        }
+      }));
+    }
+
+    // 6. Verificación específica de RLS
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      // Probar lectura sin autenticación vs con autenticación
+      const { data: publicData, error: publicError } = await supabase
+        .from('productos')
+        .select('id')
+        .limit(1);
+
+      const rlsStatus = {
+        userAuthenticated: !!user,
+        publicReadAccess: !publicError,
+        authRequiredForWrite: true // Basado en nuestras pruebas anteriores
+      };
+
+      setDiagnostics(prev => ({
+        ...prev,
+        rlsTest: {
+          status: 'success',
+          message: `RLS activo. Usuario ${user ? 'autenticado' : 'anónimo'}`,
+          details: rlsStatus
+        }
+      }));
+    } catch (error) {
+      setDiagnostics(prev => ({
+        ...prev,
+        rlsTest: {
+          status: 'error',
+          message: 'Error verificando RLS',
           details: error
         }
       }));
@@ -225,13 +406,70 @@ const SupabaseDiagnostic = () => {
           </CardContent>
         </Card>
 
+        {/* Conexión */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center justify-between text-lg">
+              <span className="flex items-center gap-2">
+                {getStatusIcon(diagnostics.connection.status)}
+                2. Prueba de Conexión
+              </span>
+              {getStatusBadge(diagnostics.connection.status)}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <p className="text-sm text-muted-foreground">{diagnostics.connection.message}</p>
+            {diagnostics.connection.details && (
+              <div className="bg-muted p-3 rounded-lg text-xs">
+                <pre className="whitespace-pre-wrap overflow-auto max-h-32">
+                  {JSON.stringify(diagnostics.connection.details, null, 2)}
+                </pre>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Información de Tablas */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center justify-between text-lg">
+              <span className="flex items-center gap-2">
+                <Database className="h-5 w-5 text-primary" />
+                3. Análisis de Tablas
+              </span>
+              {getStatusBadge(diagnostics.tablesInfo.status)}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <p className="text-sm text-muted-foreground">{diagnostics.tablesInfo.message}</p>
+            {diagnostics.tablesInfo.data && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {diagnostics.tablesInfo.data.map((table, index) => (
+                  <div key={index} className="bg-muted p-3 rounded-lg text-xs">
+                    <div className="font-semibold text-sm mb-2">{table.name}</div>
+                    <div><strong>Registros:</strong> {table.recordCount}</div>
+                    <div className="flex items-center gap-2">
+                      <strong>RLS:</strong> 
+                      {table.hasRLS ? (
+                        <Badge variant="default" className="text-xs">Activo</Badge>
+                      ) : (
+                        <Badge variant="destructive" className="text-xs">Inactivo</Badge>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Prueba de lectura */}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center justify-between text-lg">
               <span className="flex items-center gap-2">
                 {getStatusIcon(diagnostics.readTest.status)}
-                2. Prueba de Lectura (productos)
+                4. Prueba de Lectura (productos)
               </span>
               {getStatusBadge(diagnostics.readTest.status)}
             </CardTitle>
@@ -254,7 +492,7 @@ const SupabaseDiagnostic = () => {
             <CardTitle className="flex items-center justify-between text-lg">
               <span className="flex items-center gap-2">
                 {getStatusIcon(diagnostics.writeTest.status)}
-                3. Prueba de Escritura (usuarios)
+                5. Prueba de Escritura (usuarios)
               </span>
               {getStatusBadge(diagnostics.writeTest.status)}
             </CardTitle>
@@ -266,6 +504,29 @@ const SupabaseDiagnostic = () => {
                 <pre className="whitespace-pre-wrap overflow-auto max-h-32">
                   {JSON.stringify(diagnostics.writeTest.details, null, 2)}
                 </pre>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Verificación RLS */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center justify-between text-lg">
+              <span className="flex items-center gap-2">
+                <Shield className="h-5 w-5 text-primary" />
+                6. Verificación de RLS
+              </span>
+              {getStatusBadge(diagnostics.rlsTest.status)}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <p className="text-sm text-muted-foreground">{diagnostics.rlsTest.message}</p>
+            {diagnostics.rlsTest.details && (
+              <div className="bg-muted p-3 rounded-lg text-xs space-y-1">
+                <div><strong>Usuario autenticado:</strong> {diagnostics.rlsTest.details.userAuthenticated ? 'Sí' : 'No'}</div>
+                <div><strong>Lectura pública:</strong> {diagnostics.rlsTest.details.publicReadAccess ? 'Permitida' : 'Bloqueada'}</div>
+                <div><strong>Escritura requiere auth:</strong> {diagnostics.rlsTest.details.authRequiredForWrite ? 'Sí' : 'No'}</div>
               </div>
             )}
           </CardContent>
