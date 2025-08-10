@@ -96,6 +96,29 @@ const ProjectTracking = () => {
       description: "Implementación de filtros interactivos por categoría y rango de precios en el catálogo, con controles dinámicos que se actualizan según los productos disponibles.",
       status: "implemented",
       phase: "enhanced-features"
+    },
+    
+    // === SISTEMA DE CHECKOUT Y PEDIDOS (2025-01-14) ===
+    {
+      date: "2025-01-14",
+      title: "Sistema de checkout y creación de pedidos",
+      description: "Implementación completa del flujo de checkout con formulario de datos del cliente, creación de pedidos en Supabase usando tablas 'pedidos' e 'items_pedido', y validaciones.",
+      status: "implemented",
+      phase: "checkout"
+    },
+    {
+      date: "2025-01-14",
+      title: "Hook useOrders para gestión de pedidos",
+      description: "Desarrollo del hook personalizado useOrders con funciones para crear, obtener y gestionar pedidos, integrado con autenticación y manejo de errores.",
+      status: "implemented",
+      phase: "checkout"
+    },
+    {
+      date: "2025-01-14",
+      title: "Ajuste de formato de moneda en el carrito",
+      description: "Corrección del formato de precios en el carrito de EUR (€) a USD ($) para mantener consistencia con el resto de la aplicación.",
+      status: "implemented",
+      phase: "checkout"
     }
   ];
 
@@ -127,6 +150,13 @@ const ProjectTracking = () => {
       description: "Error 'Rendered more hooks than during the previous render' causado por hooks llamados condicionalmente después de early returns",
       resolution: "Se movieron todos los hooks (useState, useEffect, useMemo) al nivel superior del componente, antes de cualquier return condicional",
       status: "resolved"
+    },
+    {
+      date: "2025-01-14",
+      title: "Errores de TypeScript en useOrders",
+      description: "Conflictos de tipos al intentar usar tablas 'orders' y 'order_items' que no existían en el schema de Supabase",
+      resolution: "Se ajustó el hook para usar las tablas existentes 'pedidos' e 'items_pedido' con sus tipos correctos del schema",
+      status: "resolved"
     }
   ];
 
@@ -154,10 +184,17 @@ const ProjectTracking = () => {
       status: "completed"
     },
     {
+      date: "2025-01-14",
+      priority: "high",
+      request: "Sistema de checkout y gestión de pedidos",
+      details: "Formulario de checkout, creación de pedidos en BD, integración con carrito, validaciones de datos del cliente",
+      status: "completed"
+    },
+    {
       date: "2024-01-15",
       priority: "medium",
       request: "Aplicación web para boutique de postres premium",
-      details: "E-commerce completo con checkout sin pagos, registro de pedidos en BD",
+      details: "E-commerce completo con checkout funcional, registro de pedidos en BD",
       status: "in-progress"
     },
     {
@@ -230,17 +267,19 @@ const ProjectTracking = () => {
     },
     {
       phase: "Fase 3 - Checkout y Pedidos",
-      status: "pending",
-      completionPercentage: 0,
-      startDate: "TBD",
-      endDate: "TBD", 
+      status: "completed",
+      completionPercentage: 100,
+      startDate: "2025-01-14",
+      endDate: "2025-01-14", 
       items: [
-        "⏳ Página de checkout dedicada",
-        "⏳ Formulario de datos del cliente",
-        "⏳ Validación de pedidos",
-        "⏳ Integración con tabla 'pedidos'",
-        "⏳ Confirmación de pedidos",
-        "⏳ Envío de notificaciones"
+        "✅ Formulario de checkout integrado en MiniCart",
+        "✅ Creación de pedidos en tabla 'pedidos' de Supabase",
+        "✅ Hook useOrders para gestión completa de pedidos",
+        "✅ Validación de datos del cliente (email y nombre)",
+        "✅ Creación de items de pedido en tabla 'items_pedido'",
+        "✅ Manejo de errores y confirmaciones con toast",
+        "✅ Integración con autenticación de usuarios",
+        "✅ Formato de moneda corregido en carrito ($USD)"
       ]
     },
     {
@@ -250,12 +289,14 @@ const ProjectTracking = () => {
       startDate: "TBD",
       endDate: "TBD",
       items: [
+        "⏳ Página dedicada de checkout",
         "⏳ Gestión de pedidos para usuarios",
         "⏳ Panel administrativo",
         "⏳ Historial de compras",
-        "⏳ Sistema de notificaciones",
-        "⏳ Reportes y analytics",
-        "⏳ Optimizaciones de rendimiento"
+        "⏳ Sistema de notificaciones por email",
+        "⏳ Reportes y analytics de ventas",
+        "⏳ Optimizaciones de rendimiento",
+        "⏳ Integración con pasarela de pagos"
       ]
     }
   ];
@@ -273,6 +314,8 @@ const ProjectTracking = () => {
       "Carrito de compras persistente",
       "Mini carrito lateral",
       "Filtros de productos por categoría y precio",
+      "Sistema de checkout y creación de pedidos",
+      "Integración con tablas de pedidos en Supabase",
       "Sistema de diagnóstico Supabase avanzado"
     ],
     technicalStack: [
