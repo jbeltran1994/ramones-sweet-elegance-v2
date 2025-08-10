@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Menu, User, Heart, LogOut, ChevronDown, Settings, ShoppingBag, BarChart3 } from "lucide-react";
+import { Menu, User, Heart, LogOut, ChevronDown, Settings, ShoppingBag, BarChart3, Mail } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import MiniCart from "@/components/cart/MiniCart";
 
@@ -21,6 +21,7 @@ const Navigation = () => {
   const managementItems = [
     { name: "Panel Administrativo", path: "/admin", icon: Settings },
     { name: "Pedidos", path: "/pedidos", icon: ShoppingBag },
+    { name: "Mensajes de Contacto", path: "/admin/mensajes", icon: Mail },
     { name: "Seguimiento", path: "/seguimiento", icon: BarChart3 }
   ];
 

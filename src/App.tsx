@@ -9,6 +9,8 @@ import Index from "./pages/Index";
 import Catalogo from "./pages/Catalogo";
 import Pedidos from "./pages/Pedidos";
 import AdminPanel from "./pages/AdminPanel";
+import ContactMessages from "./components/admin/ContactMessages";
+import Navigation from "./components/Navigation";
 import Contacto from "./pages/Contacto";
 import Auth from "./pages/Auth";
 import ProjectTracking from "./pages/ProjectTracking";
@@ -29,6 +31,14 @@ const App = () => (
               <Route path="/catalogo" element={<Catalogo />} />
               <Route path="/pedidos" element={<Pedidos />} />
               <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/admin/mensajes" element={
+                <div className="min-h-screen bg-background">
+                  <Navigation />
+                  <div className="container mx-auto px-4 py-8">
+                    <ContactMessages />
+                  </div>
+                </div>
+              } />
               <Route path="/contacto" element={<Contacto />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/seguimiento" element={<ProjectTracking />} />
