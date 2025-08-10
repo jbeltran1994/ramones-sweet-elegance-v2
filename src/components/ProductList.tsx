@@ -28,6 +28,34 @@ const ProductList = () => {
   const [priceRange, setPriceRange] = useState<number[]>([0, 1000]);
   const [showFilters, setShowFilters] = useState(false);
 
+  // Obtener categorías únicas y rango de precios
+  const categories = useMemo(() => {
+    const uniqueCategories = [...new Set(productos.map(p => p.categoria).filter(Boolean))];
+    return uniqueCategories;
+  }, [productos]);
+
+  const priceRangeLimits = useMemo(() => {
+    if (productos.length === 0) return { min: 0, max: 1000 };
+    const prices = productos.map(p => p.precio);
+    return {
+      min: Math.floor(Math.min(...prices)),
+      max: Math.ceil(Math.max(...prices))
+    };
+  }, [productos]);
+
+  // Productos filtrados
+  const filteredProducts = useMemo(() => {
+    return productos.filter(producto => {
+      // Filtro por categoría
+      const categoryMatch = selectedCategory === 'all' || producto.categoria === selectedCategory;
+      
+      // Filtro por precio
+      const priceMatch = producto.precio >= priceRange[0] && producto.precio <= priceRange[1];
+      
+      return categoryMatch && priceMatch;
+    });
+  }, [productos, selectedCategory, priceRange]);
+
   useEffect(() => {
     const fetchProductos = async () => {
       try {
@@ -56,6 +84,13 @@ const ProductList = () => {
 
     fetchProductos();
   }, []);
+
+  // Actualizar rango de precios cuando cambien los productos
+  useEffect(() => {
+    if (productos.length > 0) {
+      setPriceRange([priceRangeLimits.min, priceRangeLimits.max]);
+    }
+  }, [priceRangeLimits, productos.length]);
 
   if (loading) {
     return (
@@ -91,41 +126,6 @@ const ProductList = () => {
       </div>
     );
   }
-
-  // Obtener categorías únicas y rango de precios
-  const categories = useMemo(() => {
-    const uniqueCategories = [...new Set(productos.map(p => p.categoria).filter(Boolean))];
-    return uniqueCategories;
-  }, [productos]);
-
-  const priceRangeLimits = useMemo(() => {
-    if (productos.length === 0) return { min: 0, max: 1000 };
-    const prices = productos.map(p => p.precio);
-    return {
-      min: Math.floor(Math.min(...prices)),
-      max: Math.ceil(Math.max(...prices))
-    };
-  }, [productos]);
-
-  // Productos filtrados
-  const filteredProducts = useMemo(() => {
-    return productos.filter(producto => {
-      // Filtro por categoría
-      const categoryMatch = selectedCategory === 'all' || producto.categoria === selectedCategory;
-      
-      // Filtro por precio
-      const priceMatch = producto.precio >= priceRange[0] && producto.precio <= priceRange[1];
-      
-      return categoryMatch && priceMatch;
-    });
-  }, [productos, selectedCategory, priceRange]);
-
-  // Actualizar rango de precios cuando cambien los productos
-  useEffect(() => {
-    if (productos.length > 0) {
-      setPriceRange([priceRangeLimits.min, priceRangeLimits.max]);
-    }
-  }, [priceRangeLimits, productos.length]);
 
   const formatPrice = (price: number) => {
     return `$${price.toFixed(2)}`;
