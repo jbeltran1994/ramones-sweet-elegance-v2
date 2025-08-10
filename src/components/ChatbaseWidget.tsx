@@ -10,42 +10,43 @@ const ChatbaseWidget = () => {
       return;
     }
 
-    // Crear el script de configuración específico para el chatbot
-    const configScript = document.createElement('script');
-    configScript.innerHTML = `
-      window.embeddedChatbotConfig = {
-        chatbotId: "${chatbotId}",
-        domain: "${window.location.hostname}"
-      }
-    `;
+    // Limpiar cualquier configuración anterior
+    // @ts-ignore
+    if (window.embeddedChatbotConfig) {
+      // @ts-ignore
+      delete window.embeddedChatbotConfig;
+    }
 
-    // Crear el script de carga de Chatbase
-    const embedScript = document.createElement('script');
-    embedScript.src = "https://www.chatbase.co/embed.min.js";
-    embedScript.async = true;
-    embedScript.defer = true;
-    embedScript.setAttribute('chatbotId', chatbotId);
+    // Configurar el chatbot según el formato oficial de Chatbase
+    // @ts-ignore
+    window.embeddedChatbotConfig = {
+      chatbotId: chatbotId,
+      domain: window.location.hostname
+    };
 
-    // Agregar ambos scripts al documento
-    document.head.appendChild(configScript);
-    document.head.appendChild(embedScript);
+    // Crear el script de Chatbase
+    const script = document.createElement('script');
+    script.src = 'https://www.chatbase.co/embed.min.js';
+    script.async = true;
+    script.defer = true;
 
-    // Cleanup: remover los scripts cuando el componente se desmonte o cambie la configuración
+    // Agregar el script al documento
+    document.body.appendChild(script);
+
+    // Log para debugging
+    console.log('Chatbase widget initialized with config:', {
+      chatbotId: chatbotId,
+      domain: window.location.hostname
+    });
+
+    // Cleanup: remover el script y la configuración cuando cambie
     return () => {
-      // Remover scripts específicos de Chatbase
-      const configScripts = document.querySelectorAll('script:not([src])');
-      const embedScripts = document.querySelectorAll('script[src="https://www.chatbase.co/embed.min.js"]');
-      
-      configScripts.forEach(script => {
-        if (script.innerHTML.includes('embeddedChatbotConfig')) {
-          script.remove();
-        }
-      });
-      
-      embedScripts.forEach(script => {
-        script.remove();
-      });
-      
+      // Remover el script
+      const existingScript = document.querySelector('script[src="https://www.chatbase.co/embed.min.js"]');
+      if (existingScript) {
+        existingScript.remove();
+      }
+
       // Limpiar la configuración global
       // @ts-ignore
       if (window.embeddedChatbotConfig) {
@@ -59,11 +60,19 @@ const ChatbaseWidget = () => {
         chatbaseWidget.remove();
       }
 
-      // Remover el contenedor del chat si existe
-      const chatbaseContainer = document.querySelector('[id*="chatbase"]');
-      if (chatbaseContainer) {
-        chatbaseContainer.remove();
+      // Remover el iframe del chat si existe
+      const chatbaseIframe = document.querySelector('iframe[src*="chatbase.co"]');
+      if (chatbaseIframe && chatbaseIframe.parentElement) {
+        chatbaseIframe.parentElement.remove();
       }
+
+      // Remover cualquier contenedor del chatbase
+      const chatbaseContainers = document.querySelectorAll('[id*="chatbase"], [class*="chatbase"]');
+      chatbaseContainers.forEach(container => {
+        container.remove();
+      });
+
+      console.log('Chatbase widget cleaned up');
     };
   }, [chatbotId, isEnabled]);
 

@@ -218,11 +218,27 @@ const ChatbaseSettings = () => {
             <Alert>
               <CheckCircle className="h-4 w-4" />
               <AlertDescription>
-                Chatbot configurado correctamente. ID: <code className="bg-muted px-1 rounded">{chatbotId}</code>
-                {secretKey && " • Clave secreta configurada"}
+                <div className="space-y-1">
+                  <div>Chatbot configurado correctamente. ID: <code className="bg-muted px-1 rounded">{chatbotId}</code></div>
+                  {secretKey && <div className="text-sm">• Clave secreta configurada</div>}
+                  <div className="text-sm">• Domain: <code className="bg-muted px-1 rounded">{window.location.hostname}</code></div>
+                </div>
               </AlertDescription>
             </Alert>
           )}
+
+          <Alert variant="default" className="border-blue-200 bg-blue-50">
+            <AlertCircle className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-800">
+              <strong>¿No aparece el widget?</strong> Asegúrate de que:
+              <ul className="list-disc list-inside mt-2 space-y-1 text-sm">
+                <li>El chatbot esté marcado como "público" en Chatbase</li>
+                <li>El ID del chatbot sea correcto (sin espacios extra)</li>
+                <li>Hayas guardado la configuración y activado el switch</li>
+                <li>No tengas bloqueadores de script activos</li>
+              </ul>
+            </AlertDescription>
+          </Alert>
         </CardContent>
       </Card>
 
