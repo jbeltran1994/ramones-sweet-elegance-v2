@@ -17,7 +17,7 @@ const ChatbaseContext = createContext<ChatbaseContextType | undefined>(undefined
 export const ChatbaseProvider = ({ children }: { children: ReactNode }) => {
   const [chatbotId, setChatbotId] = useState<string | null>(null);
   const [secretKey, setSecretKey] = useState<string | null>(null);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +32,7 @@ export const ChatbaseProvider = ({ children }: { children: ReactNode }) => {
           const config = JSON.parse(savedConfig);
           setChatbotId(config.chatbotId || null);
           setSecretKey(config.secretKey || null);
-          setIsEnabled(config.isEnabled || false);
+          setIsEnabled(config.isEnabled !== undefined ? config.isEnabled : true);
         }
       } catch (err) {
         console.error('Error loading Chatbase config:', err);
