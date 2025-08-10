@@ -5,12 +5,14 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Menu, User, Heart, LogOut, ChevronDown, Settings, ShoppingBag, BarChart3, Mail } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import MiniCart from "@/components/cart/MiniCart";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { user, signOut } = useAuth();
+  const { isAdmin } = useUserRole();
 
   const navItems = [
     { name: "Inicio", path: "/" },
@@ -56,34 +58,36 @@ const Navigation = () => {
               </Link>
             ))}
             
-            {/* Management Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className={`text-sm font-elegant transition-elegant ${
-                  isManagementActive()
-                    ? "text-primary font-medium"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}>
-                  Gestión Operativa
-                  <ChevronDown className="ml-1 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56 bg-background/95 backdrop-blur border border-border">
-                {managementItems.map((item) => (
-                  <DropdownMenuItem key={item.path} asChild>
-                    <Link
-                      to={item.path}
-                      className={`flex items-center w-full px-2 py-2 text-sm transition-colors hover:bg-muted ${
-                        isActive(item.path) ? "bg-muted text-primary" : "text-foreground"
-                      }`}
-                    >
-                      <item.icon className="mr-2 h-4 w-4" />
-                      {item.name}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Management Dropdown - Only visible for admins */}
+            {isAdmin && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className={`text-sm font-elegant transition-elegant ${
+                    isManagementActive()
+                      ? "text-primary font-medium"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}>
+                    Gestión Operativa
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56 bg-background/95 backdrop-blur border border-border">
+                  {managementItems.map((item) => (
+                    <DropdownMenuItem key={item.path} asChild>
+                      <Link
+                        to={item.path}
+                        className={`flex items-center w-full px-2 py-2 text-sm transition-colors hover:bg-muted ${
+                          isActive(item.path) ? "bg-muted text-primary" : "text-foreground"
+                        }`}
+                      >
+                        <item.icon className="mr-2 h-4 w-4" />
+                        {item.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
 
           {/* Action Buttons */}
@@ -138,25 +142,27 @@ const Navigation = () => {
                     </Link>
                   ))}
                   
-                  {/* Management items in mobile */}
-                  <div className="border-t pt-3 mt-3">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-                      Gestión Operativa
-                    </p>
-                    {managementItems.map((item) => (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`flex items-center text-sm font-elegant transition-elegant py-2 ${
-                          isActive(item.path) ? "text-primary font-medium" : "text-muted-foreground hover:text-foreground"
-                        }`}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <item.icon className="mr-2 h-4 w-4" />
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
+                  {/* Management items in mobile - Only visible for admins */}
+                  {isAdmin && (
+                    <div className="border-t pt-3 mt-3">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                        Gestión Operativa
+                      </p>
+                      {managementItems.map((item) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={`flex items-center text-sm font-elegant transition-elegant py-2 ${
+                            isActive(item.path) ? "text-primary font-medium" : "text-muted-foreground hover:text-foreground"
+                          }`}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          <item.icon className="mr-2 h-4 w-4" />
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                   
                   <div className="pt-6 border-t border-border">
                     {user ? (

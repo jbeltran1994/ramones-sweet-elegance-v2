@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           email: email,
           nombre: nombre,
           telefono: telefono,
+          rol: 'user', // Default role for new users
           auth_id: data.user.id
         }]);
 

@@ -5,10 +5,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Catalogo from "./pages/Catalogo";
 import Pedidos from "./pages/Pedidos";
 import AdminPanel from "./pages/AdminPanel";
+import AdminSetup from "./pages/AdminSetup";
 import ContactMessages from "./components/admin/ContactMessages";
 import Navigation from "./components/Navigation";
 import Contacto from "./pages/Contacto";
@@ -29,19 +31,36 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/catalogo" element={<Catalogo />} />
-              <Route path="/pedidos" element={<Pedidos />} />
-              <Route path="/admin" element={<AdminPanel />} />
-              <Route path="/admin/mensajes" element={
-                <div className="min-h-screen bg-background">
-                  <Navigation />
-                  <div className="container mx-auto px-4 py-8">
-                    <ContactMessages />
-                  </div>
-                </div>
-              } />
               <Route path="/contacto" element={<Contacto />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/seguimiento" element={<ProjectTracking />} />
+              <Route path="/admin-setup" element={<AdminSetup />} />
+              
+              {/* Protected admin routes */}
+              <Route path="/pedidos" element={
+                <ProtectedRoute requireAdmin={true}>
+                  <Pedidos />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin" element={
+                <ProtectedRoute requireAdmin={true}>
+                  <AdminPanel />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/mensajes" element={
+                <ProtectedRoute requireAdmin={true}>
+                  <div className="min-h-screen bg-background">
+                    <Navigation />
+                    <div className="container mx-auto px-4 py-8">
+                      <ContactMessages />
+                    </div>
+                  </div>
+                </ProtectedRoute>
+              } />
+              <Route path="/seguimiento" element={
+                <ProtectedRoute requireAdmin={true}>
+                  <ProjectTracking />
+                </ProtectedRoute>
+              } />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
