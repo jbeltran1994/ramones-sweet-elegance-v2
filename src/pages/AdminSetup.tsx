@@ -10,11 +10,11 @@ import { Shield, ArrowLeft } from 'lucide-react';
 
 const AdminSetup = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    nombre: '',
-    telefono: ''
+    email: 'jibeltran1994@gmail.com',
+    password: '1234567890',
+    confirmPassword: '1234567890',
+    nombre: 'Ramon',
+    telefono: '1976899108'
   });
   
   const { createAdminUser, isCreating } = useAdminSetup();
