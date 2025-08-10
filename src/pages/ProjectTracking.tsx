@@ -320,6 +320,39 @@ const ProjectTracking = () => {
     {
       date: "2024-01-15",
       type: "foundational",
+      prompt: `Diseña una aplicación web para "Ramones", una boutique de postres premium orientada a público ABC1. Debe permitir ver un catálogo de productos con imagen, descripción y precio, agregar al carrito, y confirmar un pedido sin pagos en línea. El pedido debe registrarse en base de datos para seguimiento. El registro de usuarios es opcional, pero si el cliente se registra luego debe poder iniciar sesión.
+
+Requisitos clave:
+- Diseño responsive, elegante, en colores pastel con sensación de lujo.
+- Secciones mínimas: Home, Catálogo, Carrito, Checkout, Confirmación, (opcional) Registro/Login, Contacto.
+- Modelo de datos propuesto: productos, pedidos, items_pedido, usuarios (opcional).
+- Backend/BaaS sugerido: Supabase para auth y DB.
+- Flujo de usuario: Home → Catálogo → Carrito → Checkout → Confirmación.
+- Carrito persistente durante la sesión.
+- Página de confirmación con resumen del pedido.
+
+Además, crea un apartado de "Seguimiento del Proyecto" donde se registre:
+- Decisiones y cambios relevantes
+- Errores/incidencias y resolución
+- Pedidos del stakeholder
+- Roadmap breve con próximos pasos
+
+Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estructura del seguimiento.`,
+      description: "Prompt inicial que define toda la arquitectura y visión de Ramones",
+      outcome: "Aplicación completa con diseño premium, carrito, autenticación y sistema de seguimiento",
+      status: "completed"
+    },
+    {
+      date: "2024-01-15",
+      type: "integration",
+      prompt: "Integra la aplicación con Supabase para autenticación y base de datos. Configura las tablas necesarias y las políticas RLS.",
+      description: "Configuración de backend con Supabase para persistencia de datos",
+      outcome: "Integración completa con Supabase, tablas configuradas y RLS implementado",
+      status: "completed"
+    },
+    {
+      date: "2024-01-15",
+      type: "foundational",
       prompt: "Agrega un filtro de productos en el catalogo. Por tipo y por costo",
       description: "Prompt inicial para crear sistema de filtros de productos",
       outcome: "Sistema de filtros completamente funcional",
@@ -645,6 +678,7 @@ const ProjectTracking = () => {
                       <Badge 
                         variant={
                           prompt.type === "foundational" ? "default" :
+                          prompt.type === "integration" ? "default" :
                           prompt.type === "feature" ? "secondary" :
                           prompt.type === "correction" ? "destructive" :
                           "outline"
@@ -656,8 +690,8 @@ const ProjectTracking = () => {
                     {getStatusBadge(prompt.status)}
                   </div>
                   <h3 className="font-elegant font-semibold mb-2">{prompt.description}</h3>
-                  <div className="bg-muted/50 p-3 rounded-md mb-2">
-                    <p className="text-sm font-mono text-foreground italic">
+                  <div className="bg-muted/50 p-3 rounded-md mb-2 max-h-32 overflow-y-auto">
+                    <p className="text-sm font-mono text-foreground italic whitespace-pre-line">
                       "{prompt.prompt}"
                     </p>
                   </div>
