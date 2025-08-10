@@ -20,8 +20,8 @@ const Pedidos = () => {
   const [loading, setLoading] = useState(true);
   
   // Estados de filtros
-  const [selectedProduct, setSelectedProduct] = useState<string>("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [selectedProduct, setSelectedProduct] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -54,7 +54,7 @@ const Pedidos = () => {
   const filteredOrders = useMemo(() => {
     return orders.filter(order => {
       // Filtro por producto
-      if (selectedProduct) {
+      if (selectedProduct && selectedProduct !== "all") {
         const hasProduct = order.items_pedido?.some((item: any) => 
           item.productos?.nombre === selectedProduct
         );
@@ -62,7 +62,7 @@ const Pedidos = () => {
       }
 
       // Filtro por estado
-      if (selectedStatus && order.estado !== selectedStatus) {
+      if (selectedStatus && selectedStatus !== "all" && order.estado !== selectedStatus) {
         return false;
       }
 
@@ -86,14 +86,14 @@ const Pedidos = () => {
   }, [orders, selectedProduct, selectedStatus, searchTerm, startDate, endDate]);
 
   const clearFilters = () => {
-    setSelectedProduct("");
-    setSelectedStatus("");
+    setSelectedProduct("all");
+    setSelectedStatus("all");
     setStartDate(undefined);
     setEndDate(undefined);
     setSearchTerm("");
   };
 
-  const hasActiveFilters = selectedProduct || selectedStatus || startDate || endDate || searchTerm;
+  const hasActiveFilters = selectedProduct !== "all" || selectedStatus !== "all" || startDate || endDate || searchTerm;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -195,7 +195,7 @@ const Pedidos = () => {
                   <SelectValue placeholder="Todos los productos" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos los productos</SelectItem>
+                  <SelectItem value="all">Todos los productos</SelectItem>
                   {uniqueProducts.map((product) => (
                     <SelectItem key={product} value={product}>
                       {product}
@@ -213,7 +213,7 @@ const Pedidos = () => {
                   <SelectValue placeholder="Todos los estados" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos los estados</SelectItem>
+                  <SelectItem value="all">Todos los estados</SelectItem>
                   <SelectItem value="pendiente">Pendiente</SelectItem>
                   <SelectItem value="procesando">Procesando</SelectItem>
                   <SelectItem value="completado">Completado</SelectItem>

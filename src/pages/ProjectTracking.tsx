@@ -171,6 +171,13 @@ const ProjectTracking = () => {
       description: "Error PGRST201 por múltiples relaciones entre 'pedidos' e 'items_pedido', consultas ambiguas",
       resolution: "Se especificó la relación exacta usando 'items_pedido!fk_items_pedido_pedido' en las consultas",
       status: "resolved"
+    },
+    {
+      date: "2025-01-14",
+      title: "Error de Select.Item con value vacío",
+      description: "Error en filtros de pedidos: Radix UI no permite value='' en Select.Item porque usa cadenas vacías para limpiar selección",
+      resolution: "Se cambiaron los valores vacíos por 'all' y se ajustó la lógica de filtros para manejar estos valores",
+      status: "resolved"
     }
   ];
 
@@ -438,6 +445,14 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       prompt: "en el panel de pedidos, agrega filtros por producto, estado del pedido y fecha",
       description: "Implementación de sistema de filtros avanzado para pedidos",
       outcome: "Filtros completos por producto, estado, cliente, y rango de fechas con calendarios interactivos",
+      status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "correction",
+      prompt: "For the code present, I get the error below. Please think step-by-step in order to resolve it. Error: A <Select.Item /> must have a value prop that is not an empty string",
+      description: "Corrección de error en componentes Select de Radix UI con valores vacíos",
+      outcome: "Error resuelto cambiando value='' por 'all' en filtros de pedidos y ajustando lógica de filtrado",
       status: "completed"
     }
   ];
