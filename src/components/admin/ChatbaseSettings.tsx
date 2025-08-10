@@ -173,8 +173,12 @@ const ChatbaseSettings = () => {
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Encuentra tu ID de chatbot en el panel de Chatbase
+                Encuentra tu ID de chatbot en Chatbase → Connect → Embed (es el ID que aparece en script.id)
               </p>
+              <div className="bg-muted/30 p-3 rounded text-xs font-mono mt-2">
+                <div className="text-muted-foreground">Ejemplo del script de Chatbase:</div>
+                <div className="mt-1">script.id = "<span className="text-primary">TU_CHATBOT_ID_AQUI</span>"</div>
+              </div>
             </div>
 
             <Separator />
@@ -266,9 +270,9 @@ const ChatbaseSettings = () => {
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-medium">2</div>
               <div>
-                <p className="font-medium">Obtén tu ID de chatbot y script de embed</p>
+                <p className="font-medium">Copia el ID correcto del chatbot</p>
                 <p className="text-sm text-muted-foreground">
-                  En tu dashboard de Chatbase, ve a la sección "Connect" → "Embed" y copia el ID de tu chatbot
+                  En tu dashboard de Chatbase, ve a "Connect" → "Embed" y busca el script. El ID está en script.id = "TU_ID_AQUI"
                 </p>
               </div>
             </div>

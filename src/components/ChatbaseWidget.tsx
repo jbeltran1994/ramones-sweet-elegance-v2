@@ -10,73 +10,86 @@ const ChatbaseWidget = () => {
       return;
     }
 
-    // Limpiar cualquier configuración anterior
-    // @ts-ignore
-    if (window.embeddedChatbotConfig) {
+    // Implementar el script exacto de Chatbase
+    const initializeChatbase = () => {
+      // Inicializar chatbase si no existe o no está inicializado
       // @ts-ignore
-      delete window.embeddedChatbotConfig;
-    }
+      if (!window.chatbase || window.chatbase("getState") !== "initialized") {
+        // @ts-ignore
+        window.chatbase = (...arguments) => {
+          // @ts-ignore
+          if (!window.chatbase.q) {
+            // @ts-ignore
+            window.chatbase.q = [];
+          }
+          // @ts-ignore
+          window.chatbase.q.push(arguments);
+        };
+        
+        // @ts-ignore
+        window.chatbase = new Proxy(window.chatbase, {
+          get(target, prop) {
+            if (prop === "q") {
+              return target.q;
+            }
+            return (...args) => target(prop, ...args);
+          }
+        });
+      }
 
-    // Configurar el chatbot según el formato oficial de Chatbase
-    // @ts-ignore
-    window.embeddedChatbotConfig = {
-      chatbotId: chatbotId,
-      domain: window.location.hostname
+      const onLoad = () => {
+        const script = document.createElement("script");
+        script.src = "https://www.chatbase.co/embed.min.js";
+        script.id = chatbotId; // ID específico del chatbot
+        script.setAttribute('domain', window.location.hostname);
+        document.body.appendChild(script);
+        
+        console.log('Chatbase script loaded with ID:', chatbotId);
+      };
+
+      if (document.readyState === "complete") {
+        onLoad();
+      } else {
+        window.addEventListener("load", onLoad);
+      }
     };
 
-    // Crear el script de Chatbase
-    const script = document.createElement('script');
-    script.src = 'https://www.chatbase.co/embed.min.js';
-    script.async = true;
-    script.defer = true;
+    // Ejecutar la inicialización
+    initializeChatbase();
 
-    // Agregar el script al documento
-    document.body.appendChild(script);
-
-    // Log para debugging
-    console.log('Chatbase widget initialized with config:', {
-      chatbotId: chatbotId,
-      domain: window.location.hostname
-    });
-
-    // Cleanup: remover el script y la configuración cuando cambie
+    // Cleanup
     return () => {
-      // Remover el script
-      const existingScript = document.querySelector('script[src="https://www.chatbase.co/embed.min.js"]');
+      // Remover el script específico
+      const existingScript = document.querySelector(`script[id="${chatbotId}"]`);
       if (existingScript) {
         existingScript.remove();
       }
 
-      // Limpiar la configuración global
+      // Limpiar la configuración global de chatbase
       // @ts-ignore
-      if (window.embeddedChatbotConfig) {
+      if (window.chatbase) {
         // @ts-ignore
-        delete window.embeddedChatbotConfig;
+        delete window.chatbase;
       }
 
-      // Remover el widget del DOM si existe
-      const chatbaseWidget = document.getElementById('chatbase-bubble-button');
-      if (chatbaseWidget) {
-        chatbaseWidget.remove();
-      }
+      // Remover cualquier elemento del widget
+      const chatbaseElements = document.querySelectorAll('[id*="chatbase"], [class*="chatbase"]');
+      chatbaseElements.forEach(element => {
+        element.remove();
+      });
 
-      // Remover el iframe del chat si existe
-      const chatbaseIframe = document.querySelector('iframe[src*="chatbase.co"]');
-      if (chatbaseIframe && chatbaseIframe.parentElement) {
-        chatbaseIframe.parentElement.remove();
-      }
-
-      // Remover cualquier contenedor del chatbase
-      const chatbaseContainers = document.querySelectorAll('[id*="chatbase"], [class*="chatbase"]');
-      chatbaseContainers.forEach(container => {
-        container.remove();
+      // Remover iframes de chatbase
+      const chatbaseIframes = document.querySelectorAll('iframe[src*="chatbase.co"]');
+      chatbaseIframes.forEach(iframe => {
+        if (iframe.parentElement) {
+          iframe.parentElement.remove();
+        }
       });
 
       console.log('Chatbase widget cleaned up');
     };
   }, [chatbotId, isEnabled]);
 
-  // Este componente no renderiza nada visible, solo carga el script
   return null;
 };
 
