@@ -140,13 +140,6 @@ const ProjectTracking = () => {
       description: "Implementación de dropdown 'Gestión Operativa' que agrupa Panel Administrativo, Pedidos y Seguimiento usando DropdownMenu de shadcn/ui.",
       status: "implemented",
       phase: "admin-panel"
-    },
-    {
-      date: "09/08/25",
-      title: "Sistema de roles y control de acceso administrativo",
-      description: "Implementación completa de sistema de roles (admin/user) con control de acceso a funciones operativas, políticas RLS diferenciadas, y protección de rutas administrativas.",
-      status: "implemented",
-      phase: "admin-security"
     }
   ];
 
@@ -293,13 +286,6 @@ const ProjectTracking = () => {
       priority: "medium",
       request: "Seguimiento del proyecto integrado",
       details: "Sistema de tracking de decisiones, errores y roadmap",
-      status: "completed"
-    },
-    {
-      date: "09/08/25",
-      priority: "high",
-      request: "Sistema de control de acceso administrativo",
-      details: "Solo administradores pueden acceder a gestión operativa, con roles diferenciados y políticas RLS específicas",
       status: "completed"
     }
   ];

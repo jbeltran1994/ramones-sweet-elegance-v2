@@ -62,7 +62,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           email: email,
           nombre: nombre,
           telefono: telefono,
-          rol: 'user', // Default role for new users
           auth_id: data.user.id
         }]);
 
@@ -84,31 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signOut = async () => {
-    try {
-      // Si no hay sesión, solo limpiar el estado local
-      if (!session) {
-        setUser(null);
-        setSession(null);
-        window.location.href = '/';
-        return;
-      }
-      
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error('Error signing out:', error);
-      }
-      
-      // Siempre limpiar el estado local y redirigir
-      setUser(null);
-      setSession(null);
-      window.location.href = '/';
-    } catch (error) {
-      console.error('Unexpected error during sign out:', error);
-      // En caso de error, aún así limpiar el estado
-      setUser(null);
-      setSession(null);
-      window.location.href = '/';
-    }
+    await supabase.auth.signOut();
   };
 
   return (
