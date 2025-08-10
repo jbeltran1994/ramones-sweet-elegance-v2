@@ -25,15 +25,21 @@ export const useContactMessages = () => {
     setIsCreating(true);
     try {
       console.log('📤 Attempting to insert into mensajes_contacto...');
+      
+      // Create the message data without user_id or auth_user_id for anonymous submissions
+      const messageToInsert = {
+        nombre: messageData.nombre,
+        telefono: messageData.telefono,
+        email: messageData.email,
+        mensaje: messageData.mensaje,
+        estado: 'pendiente' as const,
+        user_id: null, // Explicitly set to null for anonymous messages
+        auth_user_id: null // Explicitly set to null for anonymous messages
+      };
+
       const { data, error } = await (supabase as any)
         .from('mensajes_contacto')
-        .insert([{
-          nombre: messageData.nombre,
-          telefono: messageData.telefono,
-          email: messageData.email,
-          mensaje: messageData.mensaje,
-          estado: 'pendiente'
-        }])
+        .insert([messageToInsert])
         .select()
         .single();
 
