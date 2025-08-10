@@ -280,7 +280,7 @@ const SupabaseDiagnostic = () => {
         email: `test.${Date.now()}@example.com`,
         nombre: 'Usuario de Prueba Diagnóstico',
         telefono: '+34123456789',
-        auth_user_id: user?.id || null, // Usar auth_user_id en lugar de auth_id
+        auth_id: user?.id || null, // Usar auth_id (no auth_user_id)
         // fecha_registro se auto-genera con now()
         // id se auto-genera
       };

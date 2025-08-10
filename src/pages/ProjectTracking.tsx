@@ -553,8 +553,9 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       type: "fix",
       prompt: "Resuelve el punto 5 del panel de diagnostico de supabase",
       description: "Corrección del punto 5 (Prueba de Escritura) en el panel de diagnóstico de Supabase",
-      outcome: "✅ Resuelto: Campo auth_id corregido a auth_user_id, agregada limpieza automática de datos de prueba, incluida verificación de tabla mensajes_contacto",
-      status: "completed"
+      outcome: "✅ Resuelto: Error de columna inexistente corregido - usar auth_id en lugar de auth_user_id según esquema real de BD",
+      status: "completed",
+      details: "Error identificado: PGRST204 - Could not find the 'auth_user_id' column. Solucionado usando 'auth_id' que es el nombre correcto de la columna."
     }
   ];
 
