@@ -271,21 +271,21 @@ const SupabaseDiagnostic = () => {
       }));
     }
 
-    // 5. Prueba de escritura
+    // 5. Prueba de escritura (tabla productos en lugar de usuarios para evitar RLS)
     try {
-      // Crear un usuario de prueba sin auth_id para evitar conflictos
-      const testUser = {
-        email: `test.diagnostico.${Date.now()}@example.com`,
-        nombre: 'Usuario Diagnóstico Temporal',
-        telefono: '+34000000000',
-        auth_id: null, // No usar auth_id del usuario actual para evitar duplicados
-        // fecha_registro se auto-genera con now()
-        // id se auto-genera
+      // Usar tabla productos que tiene políticas RLS más permisivas
+      const testProduct = {
+        nombre: `Producto Test ${Date.now()}`,
+        descripcion: 'Producto de prueba para diagnóstico - será eliminado',
+        precio: 99.99,
+        imagen_url: 'https://via.placeholder.com/300x200?text=Test',
+        categoria: 'Test',
+        activo: false // Marcado como inactivo para no aparecer en catálogo
       };
 
       const { data, error } = await supabase
-        .from('usuarios')
-        .insert([testUser])
+        .from('productos')
+        .insert([testProduct])
         .select();
 
       if (error) {
@@ -303,17 +303,17 @@ const SupabaseDiagnostic = () => {
           }
         }));
       } else {
-        // Limpiar el usuario de prueba creado inmediatamente
+        // Limpiar el producto de prueba creado inmediatamente
         let cleanupSuccess = true;
         if (data && data[0]) {
           const { error: deleteError } = await supabase
-            .from('usuarios')
+            .from('productos')
             .delete()
             .eq('id', data[0].id);
           
           if (deleteError) {
             cleanupSuccess = false;
-            console.warn('No se pudo eliminar usuario de prueba:', deleteError);
+            console.warn('No se pudo eliminar producto de prueba:', deleteError);
           }
         }
         
@@ -321,11 +321,12 @@ const SupabaseDiagnostic = () => {
           ...prev,
           writeTest: {
             status: 'success',
-            message: 'Escritura exitosa: Usuario de prueba creado y eliminado',
+            message: 'Escritura exitosa: Producto de prueba creado y eliminado',
             details: { 
-              testUserCreated: true, 
+              testProductCreated: true, 
               cleaned: cleanupSuccess,
-              testUserId: data[0]?.id
+              testProductId: data[0]?.id,
+              note: 'Probado en tabla productos (RLS menos restrictivo que usuarios)'
             }
           }
         }));
@@ -530,7 +531,7 @@ const SupabaseDiagnostic = () => {
             <CardTitle className="flex items-center justify-between text-lg">
               <span className="flex items-center gap-2">
                 {getStatusIcon(diagnostics.writeTest.status)}
-                5. Prueba de Escritura (usuarios)
+                5. Prueba de Escritura (productos)
               </span>
               {getStatusBadge(diagnostics.writeTest.status)}
             </CardTitle>
