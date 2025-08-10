@@ -26,15 +26,13 @@ export const useContactMessages = () => {
     try {
       console.log('📤 Attempting to insert into mensajes_contacto...');
       
-      // Create the message data without user_id or auth_user_id for anonymous submissions
+      // Create the message data with only the fields that exist in the table
       const messageToInsert = {
         nombre: messageData.nombre,
         telefono: messageData.telefono,
         email: messageData.email,
         mensaje: messageData.mensaje,
-        estado: 'pendiente' as const,
-        user_id: null, // Explicitly set to null for anonymous messages
-        auth_user_id: null // Explicitly set to null for anonymous messages
+        estado: 'pendiente' as const
       };
 
       const { data, error } = await (supabase as any)
