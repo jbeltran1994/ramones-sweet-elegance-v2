@@ -31,6 +31,12 @@ export interface OrderItem {
   producto_id: number;
   cantidad: number;
   precio_unitario: number;
+  // Información adicional del producto (será obtenida via join)
+  productos?: {
+    nombre: string;
+    categoria: string | null;
+    imagen_url: string | null;
+  };
 }
 
 export const useOrders = () => {
@@ -41,13 +47,14 @@ export const useOrders = () => {
     setIsCreatingOrder(true);
     
     try {
-      // Create the order using existing pedidos table
+      // 1. Crear el pedido principal en la tabla 'pedidos'
       const { data: orderResult, error: orderError } = await supabase
         .from('pedidos')
         .insert({
           auth_user_id: user?.id || null,
           cliente_email: orderData.customer_email,
-          cliente_nombre: orderData.customer_name || 'Cliente',
+          cliente_nombre: orderData.customer_name,
+          cliente_telefono: null, // Se puede agregar más adelante
           total: orderData.total_amount,
           estado: 'pendiente'
         })
@@ -60,7 +67,9 @@ export const useOrders = () => {
         return null;
       }
 
-      // Create order items using existing items_pedido table
+      console.log('Pedido creado:', orderResult);
+
+      // 2. Crear los items del pedido en la tabla 'items_pedido'
       const orderItems = orderData.items.map(item => ({
         pedido_id: orderResult.id,
         producto_id: item.producto_id,
@@ -68,20 +77,26 @@ export const useOrders = () => {
         precio_unitario: item.precio
       }));
 
-      const { error: itemsError } = await supabase
+      const { data: itemsResult, error: itemsError } = await supabase
         .from('items_pedido')
-        .insert(orderItems);
+        .insert(orderItems)
+        .select();
 
       if (itemsError) {
         console.error('Error creating order items:', itemsError);
-        // Try to delete the order if items creation failed
+        // Rollback: eliminar el pedido si falló la creación de items
         await supabase.from('pedidos').delete().eq('id', orderResult.id);
         toast.error('Error al crear los items del pedido');
         return null;
       }
 
-      toast.success('¡Pedido creado exitosamente!');
-      return orderResult as Order;
+      console.log('Items del pedido creados:', itemsResult);
+
+      // 3. Obtener el pedido completo con sus items para retornarlo
+      const completeOrder = await getOrderById(orderResult.id);
+
+      toast.success(`¡Pedido #${orderResult.id} creado exitosamente!`);
+      return completeOrder;
 
     } catch (error) {
       console.error('Unexpected error creating order:', error);
@@ -98,7 +113,18 @@ export const useOrders = () => {
         .from('pedidos')
         .select(`
           *,
-          items_pedido (*)
+          items_pedido (
+            id,
+            pedido_id,
+            producto_id,
+            cantidad,
+            precio_unitario,
+            productos!items_pedido_producto_id_fkey (
+              nombre,
+              categoria,
+              imagen_url
+            )
+          )
         `)
         .order('fecha_creacion', { ascending: false });
 
@@ -108,7 +134,8 @@ export const useOrders = () => {
         return [];
       }
 
-      return data as Order[];
+      console.log('Pedidos obtenidos:', data);
+      return data as any[];
     } catch (error) {
       console.error('Unexpected error fetching orders:', error);
       toast.error('Error inesperado al obtener los pedidos');
@@ -122,7 +149,18 @@ export const useOrders = () => {
         .from('pedidos')
         .select(`
           *,
-          items_pedido (*)
+          items_pedido (
+            id,
+            pedido_id,
+            producto_id,
+            cantidad,
+            precio_unitario,
+            productos!items_pedido_producto_id_fkey (
+              nombre,
+              categoria,
+              imagen_url
+            )
+          )
         `)
         .eq('id', orderId)
         .single();
@@ -132,7 +170,8 @@ export const useOrders = () => {
         return null;
       }
 
-      return data as Order;
+      console.log('Pedido individual obtenido:', data);
+      return data as any;
     } catch (error) {
       console.error('Unexpected error fetching order:', error);
       return null;

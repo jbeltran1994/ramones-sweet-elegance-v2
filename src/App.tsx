@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
 import Index from "./pages/Index";
 import Catalogo from "./pages/Catalogo";
+import Pedidos from "./pages/Pedidos";
 import Contacto from "./pages/Contacto";
 import Auth from "./pages/Auth";
 import ProjectTracking from "./pages/ProjectTracking";
@@ -25,6 +26,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/catalogo" element={<Catalogo />} />
+              <Route path="/pedidos" element={<Pedidos />} />
               <Route path="/contacto" element={<Contacto />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/seguimiento" element={<ProjectTracking />} />

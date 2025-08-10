@@ -63,7 +63,8 @@ const MiniCart = () => {
       setCustomerEmail('');
       setCustomerName('');
       
-      console.log('Pedido creado:', order);
+      // Mostrar mensaje con número de pedido
+      console.log('Pedido creado exitosamente:', order);
     }
   };
 
