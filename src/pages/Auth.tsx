@@ -10,12 +10,13 @@ import Navigation from '@/components/Navigation';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, signUp, resetPassword, user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -95,6 +96,47 @@ const Auth = () => {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email) {
+      toast({
+        title: "Error",
+        description: "Por favor ingresa tu email",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { error } = await resetPassword(email);
+      
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Ocurrió un error al enviar el email de recuperación",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Email enviado",
+          description: "Revisa tu email para las instrucciones de recuperación de contraseña",
+        });
+        setShowForgotPassword(false);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Ocurrió un error inesperado",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -104,97 +146,147 @@ const Auth = () => {
           <Card className="p-8 bg-gradient-card shadow-elegant">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-luxury font-bold mb-2 bg-gradient-hero bg-clip-text text-transparent">
-                {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
+                {showForgotPassword ? 'Recuperar Contraseña' : isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
               </h1>
               <p className="text-muted-foreground font-elegant">
-                {isLogin 
-                  ? 'Accede a tu cuenta para gestionar tus pedidos'
-                  : 'Crea una cuenta para un mejor seguimiento de tus pedidos'
+                {showForgotPassword 
+                  ? 'Ingresa tu email para recibir instrucciones de recuperación'
+                  : isLogin 
+                    ? 'Accede a tu cuenta para gestionar tus pedidos'
+                    : 'Crea una cuenta para un mejor seguimiento de tus pedidos'
                 }
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="tu@email.com"
-                  className="bg-background/50"
-                  required
-                />
-              </div>
+            {showForgotPassword ? (
+              <form onSubmit={handleForgotPassword} className="space-y-6">
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="tu@email.com"
+                    className="bg-background/50"
+                    required
+                  />
+                </div>
 
-              {!isLogin && (
-                <>
-                  <div>
-                    <Label htmlFor="nombre">Nombre completo</Label>
-                    <Input
-                      id="nombre"
-                      type="text"
-                      value={nombre}
-                      onChange={(e) => setNombre(e.target.value)}
-                      placeholder="Tu nombre completo"
-                      className="bg-background/50"
-                      required
-                    />
+                <Button 
+                  type="submit" 
+                  variant="premium" 
+                  className="w-full"
+                  disabled={loading}
+                >
+                  {loading ? 'Enviando...' : 'Enviar email de recuperación'}
+                </Button>
+              </form>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="tu@email.com"
+                    className="bg-background/50"
+                    required
+                  />
+                </div>
+
+                {!isLogin && (
+                  <>
+                    <div>
+                      <Label htmlFor="nombre">Nombre completo</Label>
+                      <Input
+                        id="nombre"
+                        type="text"
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
+                        placeholder="Tu nombre completo"
+                        className="bg-background/50"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="telefono">Teléfono</Label>
+                      <Input
+                        id="telefono"
+                        type="tel"
+                        value={telefono}
+                        onChange={(e) => setTelefono(e.target.value)}
+                        placeholder="+34 123 456 789"
+                        className="bg-background/50"
+                        required
+                      />
+                    </div>
+                  </>
+                )}
+
+                <div>
+                  <Label htmlFor="password">Contraseña</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="bg-background/50"
+                    required
+                  />
+                </div>
+
+                {isLogin && (
+                  <div className="text-right">
+                    <button
+                      type="button"
+                      onClick={() => setShowForgotPassword(true)}
+                      className="text-primary hover:text-primary/80 font-elegant text-sm"
+                    >
+                      ¿Olvidaste tu contraseña?
+                    </button>
                   </div>
+                )}
 
-                  <div>
-                    <Label htmlFor="telefono">Teléfono</Label>
-                    <Input
-                      id="telefono"
-                      type="tel"
-                      value={telefono}
-                      onChange={(e) => setTelefono(e.target.value)}
-                      placeholder="+34 123 456 789"
-                      className="bg-background/50"
-                      required
-                    />
-                  </div>
-                </>
-              )}
-
-              <div>
-                <Label htmlFor="password">Contraseña</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="bg-background/50"
-                  required
-                />
-              </div>
-
-              <Button 
-                type="submit" 
-                variant="premium" 
-                className="w-full"
-                disabled={loading}
-              >
-                {loading 
-                  ? 'Procesando...' 
-                  : isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'
-                }
-              </Button>
-            </form>
+                <Button 
+                  type="submit" 
+                  variant="premium" 
+                  className="w-full"
+                  disabled={loading}
+                >
+                  {loading 
+                    ? 'Procesando...' 
+                    : isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'
+                  }
+                </Button>
+              </form>
+            )}
 
             <div className="mt-6 text-center">
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-primary hover:text-primary/80 font-elegant"
-              >
-                {isLogin 
-                  ? '¿No tienes cuenta? Créala aquí'
-                  : '¿Ya tienes cuenta? Inicia sesión'
-                }
-              </button>
+              {showForgotPassword ? (
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(false)}
+                  className="text-primary hover:text-primary/80 font-elegant"
+                >
+                  Volver al inicio de sesión
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsLogin(!isLogin)}
+                  className="text-primary hover:text-primary/80 font-elegant"
+                >
+                  {isLogin 
+                    ? '¿No tienes cuenta? Créala aquí'
+                    : '¿Ya tienes cuenta? Inicia sesión'
+                  }
+                </button>
+              )}
             </div>
           </Card>
         </div>

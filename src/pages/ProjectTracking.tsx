@@ -147,6 +147,13 @@ const ProjectTracking = () => {
       description: "Se restringió el acceso al panel administrativo exclusivamente para jibeltranpetrungaro@gmail.com, removiendo otros usuarios autorizados.",
       status: "implemented",
       phase: "admin-panel"
+    },
+    {
+      date: "10/08/25",
+      title: "Implementación de recuperación de contraseña",
+      description: "Se agregó la funcionalidad 'Olvidé mi contraseña' en la página de autenticación, permitiendo a los usuarios recuperar el acceso a sus cuentas.",
+      status: "implemented",
+      phase: "auth"
     }
   ];
 
@@ -300,6 +307,13 @@ const ProjectTracking = () => {
       priority: "high",
       request: "Restricción de acceso administrativo a usuario único",
       details: "Restringir acceso al panel de gestión operativa exclusivamente para jibeltranpetrungaro@gmail.com",
+      status: "completed"
+    },
+    {
+      date: "10/08/25",
+      priority: "medium",
+      request: "Implementar funcionalidad de recuperación de contraseña",
+      details: "Agregar la opción 'Olvidé mi contraseña' en el formulario de inicio de sesión",
       status: "completed"
     }
   ];
