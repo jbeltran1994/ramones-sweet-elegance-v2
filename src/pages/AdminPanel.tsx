@@ -7,6 +7,7 @@ import ProductManagement from "@/components/admin/ProductManagement";
 import OrderManagement from "@/components/admin/OrderManagement";
 import UserManagement from "@/components/admin/UserManagement";
 import AdminReports from "@/components/admin/AdminReports";
+import ChatbaseSettings from "@/components/admin/ChatbaseSettings";
 import { Settings, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -69,12 +70,13 @@ const AdminPanel = () => {
         </div>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 bg-gradient-card">
+          <TabsList className="grid w-full grid-cols-6 bg-gradient-card">
             <TabsTrigger value="dashboard" className="font-medium">Dashboard</TabsTrigger>
             <TabsTrigger value="products" className="font-medium">Productos</TabsTrigger>
             <TabsTrigger value="orders" className="font-medium">Pedidos</TabsTrigger>
             <TabsTrigger value="users" className="font-medium">Usuarios</TabsTrigger>
             <TabsTrigger value="reports" className="font-medium">Reportes</TabsTrigger>
+            <TabsTrigger value="chatbase" className="font-medium">Chatbase</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="space-y-6">
@@ -95,6 +97,10 @@ const AdminPanel = () => {
 
           <TabsContent value="reports" className="space-y-6">
             <AdminReports />
+          </TabsContent>
+
+          <TabsContent value="chatbase" className="space-y-6">
+            <ChatbaseSettings />
           </TabsContent>
         </Tabs>
       </div>

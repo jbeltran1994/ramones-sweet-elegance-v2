@@ -1,9 +1,9 @@
 
 import Navigation from "@/components/Navigation";
 import SupabaseDiagnostic from "@/components/SupabaseDiagnostic";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Clock, AlertCircle, Users, Target, FileText, MessageSquare } from "lucide-react";
+import { CheckCircle, Clock, AlertCircle, Users, Target, FileText, MessageSquare, Bot, Calendar, AlertTriangle, Zap, Database, Shield, Palette, Code, ShoppingCart, BarChart3, Settings } from "lucide-react";
 
 const ProjectTracking = () => {
   // ============== DECISIONES TÉCNICAS Y CAMBIOS ==============
@@ -161,6 +161,13 @@ const ProjectTracking = () => {
       description: "Se removió la restricción de usuario específico, permitiendo que cualquier usuario autenticado acceda al panel de gestión operativa.",
       status: "implemented",
       phase: "admin-panel"
+    },
+    {
+      date: "10/08/25",
+      title: "Integración completa de Chatbase",
+      description: "Se implementó la integración completa con Chatbase, incluyendo widget embebido, configuración administrativa, y sistema de gestión de estados.",
+      status: "implemented",
+      phase: "chatbase-integration"
     }
   ];
 
@@ -328,6 +335,13 @@ const ProjectTracking = () => {
       priority: "high",
       request: "Liberación completa del acceso administrativo",
       details: "Quitar todas las restricciones de usuario para el acceso a gestión operativa y sus apartados",
+      status: "completed"
+    },
+    {
+      date: "10/08/25",
+      priority: "high",
+      request: "Integración completa de Chatbase",
+      details: "Incorporar la estructura necesaria para conectarse con Chatbase, hacer la integración y crear documentación completa",
       status: "completed"
     }
   ];
@@ -729,6 +743,59 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
                 </div>
               </div>
             </div>
+            </Card>
+
+          {/* Chatbase Integration */}
+          <Card className="border-l-4 border-l-blue-500">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Bot className="h-5 w-5 text-blue-600" />
+                Integración de Chatbase
+              </CardTitle>
+              <CardDescription>
+                Sistema completo de integración con Chatbase para soporte automatizado
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <h4 className="font-semibold mb-2">Componentes Implementados</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• ChatbaseWidget - Widget embebido</li>
+                    <li>• useChatbase - Hook de gestión de estado</li>
+                    <li>• ChatbaseSettings - Panel de configuración</li>
+                    <li>• ChatbaseProvider - Contexto global</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Características</h4>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Configuración desde panel admin</li>
+                    <li>• Activación/desactivación dinámica</li>
+                    <li>• Persistencia en localStorage</li>
+                    <li>• Carga condicional del script</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="bg-muted/50 p-4 rounded-lg">
+                <h4 className="font-semibold mb-2">Configuración de Uso</h4>
+                <ol className="space-y-2 text-sm">
+                  <li>1. Ir al Panel Administrativo → Pestaña "Chatbase"</li>
+                  <li>2. Crear chatbot en <code className="bg-background px-1 rounded">chatbase.co</code></li>
+                  <li>3. Copiar el ID del chatbot desde el dashboard</li>
+                  <li>4. Pegar el ID en la configuración y guardar</li>
+                  <li>5. Activar el switch para mostrar el widget</li>
+                </ol>
+              </div>
+
+              <div className="flex items-center gap-2 text-sm">
+                <Badge variant="outline">React Context</Badge>
+                <Badge variant="outline">Dynamic Loading</Badge>
+                <Badge variant="outline">Admin Panel</Badge>
+                <Badge variant="outline">TypeScript</Badge>
+              </div>
+            </CardContent>
           </Card>
 
           {/* Decisions & Changes */}
