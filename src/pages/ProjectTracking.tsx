@@ -551,11 +551,11 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
     {
       date: "2025-08-10",
       type: "fix",
-      prompt: "Resuelve el punto 5 del panel de diagnostico de supabase",
-      description: "Corrección del punto 5 (Prueba de Escritura) en el panel de diagnóstico de Supabase",
-      outcome: "✅ Resuelto: Error de columna inexistente corregido - usar auth_id en lugar de auth_user_id según esquema real de BD",
+      prompt: "Error de escritura: duplicate key value violates unique constraint \"usuarios_auth_id_key\"",
+      description: "Corrección de error de clave duplicada en prueba de escritura del diagnóstico de Supabase",
+      outcome: "✅ Resuelto: Modificada prueba para usar auth_id=null y evitar conflictos con usuarios existentes. Usuario de prueba se crea y elimina sin causar duplicados.",
       status: "completed",
-      details: "Error identificado: PGRST204 - Could not find the 'auth_user_id' column. Solucionado usando 'auth_id' que es el nombre correcto de la columna."
+      details: "Error identificado: Constraint violation porque el usuario autenticado ya existe en la tabla. Solución: usar auth_id=null para pruebas."
     }
   ];
 

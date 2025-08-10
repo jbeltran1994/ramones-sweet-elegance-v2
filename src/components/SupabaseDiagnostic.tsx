@@ -273,14 +273,12 @@ const SupabaseDiagnostic = () => {
 
     // 5. Prueba de escritura
     try {
-      // Obtener el usuario actual si está autenticado
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      // Crear un usuario de prueba sin auth_id para evitar conflictos
       const testUser = {
-        email: `test.${Date.now()}@example.com`,
-        nombre: 'Usuario de Prueba Diagnóstico',
-        telefono: '+34123456789',
-        auth_id: user?.id || null, // Usar auth_id (no auth_user_id)
+        email: `test.diagnostico.${Date.now()}@example.com`,
+        nombre: 'Usuario Diagnóstico Temporal',
+        telefono: '+34000000000',
+        auth_id: null, // No usar auth_id del usuario actual para evitar duplicados
         // fecha_registro se auto-genera con now()
         // id se auto-genera
       };
@@ -299,25 +297,36 @@ const SupabaseDiagnostic = () => {
             details: {
               code: error.code,
               hint: error.hint,
-              details: error.details
+              details: error.details,
+              originalError: error
             }
           }
         }));
       } else {
-        // Limpiar el usuario de prueba creado
+        // Limpiar el usuario de prueba creado inmediatamente
+        let cleanupSuccess = true;
         if (data && data[0]) {
-          await supabase
+          const { error: deleteError } = await supabase
             .from('usuarios')
             .delete()
             .eq('id', data[0].id);
+          
+          if (deleteError) {
+            cleanupSuccess = false;
+            console.warn('No se pudo eliminar usuario de prueba:', deleteError);
+          }
         }
         
         setDiagnostics(prev => ({
           ...prev,
           writeTest: {
             status: 'success',
-            message: 'Escritura exitosa: Usuario creado y eliminado',
-            details: { testUserCreated: true, cleaned: true }
+            message: 'Escritura exitosa: Usuario de prueba creado y eliminado',
+            details: { 
+              testUserCreated: true, 
+              cleaned: cleanupSuccess,
+              testUserId: data[0]?.id
+            }
           }
         }));
       }
