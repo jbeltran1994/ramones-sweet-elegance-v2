@@ -3,7 +3,7 @@ import Navigation from "@/components/Navigation";
 import SupabaseDiagnostic from "@/components/SupabaseDiagnostic";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Clock, AlertCircle, Users, Target, FileText } from "lucide-react";
+import { CheckCircle, Clock, AlertCircle, Users, Target, FileText, MessageSquare } from "lucide-react";
 
 const ProjectTracking = () => {
   // ============== DECISIONES TÉCNICAS Y CAMBIOS ==============
@@ -157,6 +157,13 @@ const ProjectTracking = () => {
       description: "Conflictos de tipos al intentar usar tablas 'orders' y 'order_items' que no existían en el schema de Supabase",
       resolution: "Se ajustó el hook para usar las tablas existentes 'pedidos' e 'items_pedido' con sus tipos correctos del schema",
       status: "resolved"
+    },
+    {
+      date: "2025-01-14",
+      title: "Error de relaciones múltiples en consultas Supabase",
+      description: "Error PGRST201 por múltiples relaciones entre 'pedidos' e 'items_pedido', consultas ambiguas",
+      resolution: "Se especificó la relación exacta usando 'items_pedido!fk_items_pedido_pedido' en las consultas",
+      status: "resolved"
     }
   ];
 
@@ -191,11 +198,18 @@ const ProjectTracking = () => {
       status: "completed"
     },
     {
+      date: "2025-01-14",
+      priority: "high",
+      request: "Página de visualización de pedidos",
+      details: "Historial completo de pedidos con detalles de items, estado, cliente, fecha y totales",
+      status: "completed"
+    },
+    {
       date: "2024-01-15",
       priority: "medium",
       request: "Aplicación web para boutique de postres premium",
-      details: "E-commerce completo con checkout funcional, registro de pedidos en BD",
-      status: "in-progress"
+      details: "E-commerce completo con checkout funcional, registro y visualización de pedidos en BD",
+      status: "completed"
     },
     {
       date: "2024-01-15",
@@ -279,7 +293,9 @@ const ProjectTracking = () => {
         "✅ Creación de items de pedido en tabla 'items_pedido'",
         "✅ Manejo de errores y confirmaciones con toast",
         "✅ Integración con autenticación de usuarios",
-        "✅ Formato de moneda corregido en carrito ($USD)"
+        "✅ Formato de moneda corregido en carrito ($USD)",
+        "✅ Página de pedidos con historial completo",
+        "✅ Corrección de consultas con relaciones múltiples"
       ]
     },
     {
@@ -289,15 +305,89 @@ const ProjectTracking = () => {
       startDate: "TBD",
       endDate: "TBD",
       items: [
-        "⏳ Página dedicada de checkout",
-        "⏳ Gestión de pedidos para usuarios",
         "⏳ Panel administrativo",
-        "⏳ Historial de compras",
+        "⏳ Gestión de estados de pedidos",
         "⏳ Sistema de notificaciones por email",
         "⏳ Reportes y analytics de ventas",
         "⏳ Optimizaciones de rendimiento",
         "⏳ Integración con pasarela de pagos"
       ]
+    }
+  ];
+
+  // ============== HISTORIAL DE PROMPTS ==============
+  const promptHistory = [
+    {
+      date: "2024-01-15",
+      type: "foundational",
+      prompt: "Agrega un filtro de productos en el catalogo. Por tipo y por costo",
+      description: "Prompt inicial para crear sistema de filtros de productos",
+      outcome: "Sistema de filtros completamente funcional",
+      status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "enhancement",
+      prompt: "Actualiza el area de seguimiento con esta ultima mejora y con este ultimo problema resuelto",
+      description: "Solicitud de actualización del tracking de cambios",
+      outcome: "Página de seguimiento actualizada con filtros y errores resueltos",
+      status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "correction",
+      prompt: "For the code present, I get the error below. Please think step-by-step in order to resolve it. Error: Rendered more hooks than during the previous render.",
+      description: "Corrección de error de React hooks en ProductList",
+      outcome: "Error resuelto moviendo hooks al nivel superior del componente",
+      status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "feature",
+      prompt: "Cuando en el carrito aprieto boton de ir al checkout no sucede nada. Deberia generar un pedido en supabase al menos",
+      description: "Implementación del sistema de checkout y pedidos",
+      outcome: "Sistema completo de checkout con creación de pedidos en BD",
+      status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "feature",
+      prompt: "solo creación de pedidos sin pasarela de pagos",
+      description: "Aclaración del alcance del checkout (sin pagos)",
+      outcome: "Hook useOrders implementado para gestión de pedidos",
+      status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "correction",
+      prompt: "Ajusta el signo de $ en el carrito",
+      description: "Corrección del formato de moneda en el carrito",
+      outcome: "Formato cambiado de EUR (€) a USD ($)",
+      status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "correction",
+      prompt: "La logica del pedido no utiliza la tabla items pedido, ajusta la logica para que el flujo sea correcto e integre esta tabla con sus atributos",
+      description: "Corrección de la lógica de pedidos para usar tabla items_pedido",
+      outcome: "Flujo corregido con creación en ambas tablas: pedidos e items_pedido",
+      status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "correction",
+      prompt: "NO se muestran los pedidos en el apartado pedidos. Corrige esto y actualiza apartado de seguimiento con la ultima info para cada sección",
+      description: "Corrección de visualización de pedidos y actualización de seguimiento",
+      outcome: "Error de relaciones múltiples resuelto, pedidos ahora se visualizan correctamente",
+      status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "enhancement",
+      prompt: "Por ultimo agrega una nueva sección con los prompts utilizados para construir la web. Desde el prompt fundacional pasando por los prompt de correcciones",
+      description: "Creación de historial de prompts para transparencia del desarrollo",
+      outcome: "Sección de historial de prompts agregada al seguimiento",
+      status: "in-progress"
     }
   ];
 
@@ -315,6 +405,7 @@ const ProjectTracking = () => {
       "Mini carrito lateral",
       "Filtros de productos por categoría y precio",
       "Sistema de checkout y creación de pedidos",
+      "Página de historial de pedidos",
       "Integración con tablas de pedidos en Supabase",
       "Sistema de diagnóstico Supabase avanzado"
     ],
@@ -529,6 +620,50 @@ const ProjectTracking = () => {
                       </li>
                     ))}
                   </ul>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Prompt History */}
+          <Card className="p-6 bg-gradient-card shadow-elegant">
+            <div className="flex items-center mb-6">
+              <MessageSquare className="h-6 w-6 text-primary mr-3" />
+              <h2 className="text-2xl font-luxury font-semibold">Historial de Prompts</h2>
+            </div>
+            <div className="text-sm text-muted-foreground mb-4">
+              Registro cronológico de todos los prompts utilizados para construir la aplicación, 
+              desde la solicitud fundacional hasta las correcciones y mejoras.
+            </div>
+            <div className="space-y-4">
+              {promptHistory.map((prompt, index) => (
+                <div key={index} className="border-l-2 border-purple-300 pl-6 pb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      {getStatusIcon(prompt.status)}
+                      <span className="text-sm text-muted-foreground">{prompt.date}</span>
+                      <Badge 
+                        variant={
+                          prompt.type === "foundational" ? "default" :
+                          prompt.type === "feature" ? "secondary" :
+                          prompt.type === "correction" ? "destructive" :
+                          "outline"
+                        }
+                      >
+                        {prompt.type}
+                      </Badge>
+                    </div>
+                    {getStatusBadge(prompt.status)}
+                  </div>
+                  <h3 className="font-elegant font-semibold mb-2">{prompt.description}</h3>
+                  <div className="bg-muted/50 p-3 rounded-md mb-2">
+                    <p className="text-sm font-mono text-foreground italic">
+                      "{prompt.prompt}"
+                    </p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    <strong>Resultado:</strong> {prompt.outcome}
+                  </p>
                 </div>
               ))}
             </div>

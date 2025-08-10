@@ -113,7 +113,7 @@ export const useOrders = () => {
         .from('pedidos')
         .select(`
           *,
-          items_pedido (
+          items_pedido!fk_items_pedido_pedido (
             id,
             pedido_id,
             producto_id,
@@ -149,7 +149,7 @@ export const useOrders = () => {
         .from('pedidos')
         .select(`
           *,
-          items_pedido (
+          items_pedido!fk_items_pedido_pedido (
             id,
             pedido_id,
             producto_id,
