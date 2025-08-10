@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, User, Heart, LogOut } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Menu, User, Heart, LogOut, ChevronDown, Settings, ShoppingBag, BarChart3 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import MiniCart from "@/components/cart/MiniCart";
 
@@ -14,12 +15,17 @@ const Navigation = () => {
   const navItems = [
     { name: "Inicio", path: "/" },
     { name: "Catálogo", path: "/catalogo" },
-    { name: "Pedidos", path: "/pedidos" },
-    { name: "Contacto", path: "/contacto" },
-    { name: "Seguimiento", path: "/seguimiento" },
+    { name: "Contacto", path: "/contacto" }
+  ];
+
+  const managementItems = [
+    { name: "Panel Administrativo", path: "/admin", icon: Settings },
+    { name: "Pedidos", path: "/pedidos", icon: ShoppingBag },
+    { name: "Seguimiento", path: "/seguimiento", icon: BarChart3 }
   ];
 
   const isActive = (path: string) => location.pathname === path;
+  const isManagementActive = () => managementItems.some(item => isActive(item.path));
 
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
@@ -48,6 +54,35 @@ const Navigation = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Management Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className={`text-sm font-elegant transition-elegant ${
+                  isManagementActive()
+                    ? "text-primary font-medium"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}>
+                  Gestión Operativa
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56 bg-background/95 backdrop-blur border border-border">
+                {managementItems.map((item) => (
+                  <DropdownMenuItem key={item.path} asChild>
+                    <Link
+                      to={item.path}
+                      className={`flex items-center w-full px-2 py-2 text-sm transition-colors hover:bg-muted ${
+                        isActive(item.path) ? "bg-muted text-primary" : "text-foreground"
+                      }`}
+                    >
+                      <item.icon className="mr-2 h-4 w-4" />
+                      {item.name}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Action Buttons */}
@@ -101,6 +136,27 @@ const Navigation = () => {
                       {item.name}
                     </Link>
                   ))}
+                  
+                  {/* Management items in mobile */}
+                  <div className="border-t pt-3 mt-3">
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                      Gestión Operativa
+                    </p>
+                    {managementItems.map((item) => (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        className={`flex items-center text-sm font-elegant transition-elegant py-2 ${
+                          isActive(item.path) ? "text-primary font-medium" : "text-muted-foreground hover:text-foreground"
+                        }`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <item.icon className="mr-2 h-4 w-4" />
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                  
                   <div className="pt-6 border-t border-border">
                     {user ? (
                       <div className="space-y-2">
