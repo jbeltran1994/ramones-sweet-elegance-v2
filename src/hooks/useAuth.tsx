@@ -85,18 +85,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signOut = async () => {
     try {
+      // Si no hay sesión, solo limpiar el estado local
+      if (!session) {
+        setUser(null);
+        setSession(null);
+        window.location.href = '/';
+        return;
+      }
+      
       const { error } = await supabase.auth.signOut();
       if (error) {
         console.error('Error signing out:', error);
-        return;
       }
-      // Force clear local state
+      
+      // Siempre limpiar el estado local y redirigir
       setUser(null);
       setSession(null);
-      // Redirect to home page
       window.location.href = '/';
     } catch (error) {
       console.error('Unexpected error during sign out:', error);
+      // En caso de error, aún así limpiar el estado
+      setUser(null);
+      setSession(null);
+      window.location.href = '/';
     }
   };
 

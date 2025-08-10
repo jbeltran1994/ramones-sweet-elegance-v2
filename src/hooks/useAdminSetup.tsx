@@ -9,12 +9,15 @@ export const useAdminSetup = () => {
   const createAdminUser = async (email: string, password: string, nombre: string, telefono: string) => {
     setIsCreating(true);
     try {
-      // 1. Create the auth user
+      // 1. Create the auth user with auto-confirm for admin
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`
+          emailRedirectTo: `${window.location.origin}/`,
+          data: {
+            email_confirm: true // Auto-confirm admin users
+          }
         }
       });
 
