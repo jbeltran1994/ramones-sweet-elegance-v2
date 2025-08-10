@@ -119,6 +119,13 @@ const ProjectTracking = () => {
       description: "Corrección del formato de precios en el carrito de EUR (€) a USD ($) para mantener consistencia con el resto de la aplicación.",
       status: "implemented",
       phase: "checkout"
+    },
+    {
+      date: "2025-01-14",
+      title: "Sistema de filtros avanzado para pedidos",
+      description: "Implementación de filtros múltiples en la página de pedidos: por producto, estado, cliente y rango de fechas con calendarios interactivos de shadcn/ui.",
+      status: "implemented",
+      phase: "checkout"
     }
   ];
 
@@ -295,7 +302,10 @@ const ProjectTracking = () => {
         "✅ Integración con autenticación de usuarios",
         "✅ Formato de moneda corregido en carrito ($USD)",
         "✅ Página de pedidos con historial completo",
-        "✅ Corrección de consultas con relaciones múltiples"
+        "✅ Corrección de consultas con relaciones múltiples",
+        "✅ Sistema de filtros avanzado para pedidos",
+        "✅ Filtros por producto, estado, cliente y fechas",
+        "✅ Calendarios interactivos para rangos de fechas"
       ]
     },
     {
@@ -352,7 +362,7 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
     },
     {
       date: "2024-01-15",
-      type: "foundational",
+      type: "enhancement",
       prompt: "Agrega un filtro de productos en el catalogo. Por tipo y por costo",
       description: "Prompt inicial para crear sistema de filtros de productos",
       outcome: "Sistema de filtros completamente funcional",
@@ -420,7 +430,15 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       prompt: "Por ultimo agrega una nueva sección con los prompts utilizados para construir la web. Desde el prompt fundacional pasando por los prompt de correcciones",
       description: "Creación de historial de prompts para transparencia del desarrollo",
       outcome: "Sección de historial de prompts agregada al seguimiento",
-      status: "in-progress"
+      status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "enhancement",
+      prompt: "en el panel de pedidos, agrega filtros por producto, estado del pedido y fecha",
+      description: "Implementación de sistema de filtros avanzado para pedidos",
+      outcome: "Filtros completos por producto, estado, cliente, y rango de fechas con calendarios interactivos",
+      status: "completed"
     }
   ];
 
@@ -438,7 +456,8 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       "Mini carrito lateral",
       "Filtros de productos por categoría y precio",
       "Sistema de checkout y creación de pedidos",
-      "Página de historial de pedidos",
+      "Página de historial de pedidos con filtros avanzados",
+      "Filtros de pedidos por producto, estado, cliente y fechas",
       "Integración con tablas de pedidos en Supabase",
       "Sistema de diagnóstico Supabase avanzado"
     ],

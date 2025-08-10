@@ -2,13 +2,29 @@ import Navigation from "@/components/Navigation";
 import { useOrders } from "@/hooks/useOrders";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useEffect, useState } from "react";
-import { ShoppingBag, Calendar, User, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useEffect, useState, useMemo } from "react";
+import { ShoppingBag, Calendar as CalendarIcon, User, Mail, Filter, X } from "lucide-react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 const Pedidos = () => {
   const { getOrders } = useOrders();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Estados de filtros
+  const [selectedProduct, setSelectedProduct] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -20,6 +36,64 @@ const Pedidos = () => {
 
     fetchOrders();
   }, []);
+
+  // Obtener lista única de productos de todos los pedidos
+  const uniqueProducts = useMemo(() => {
+    const products = new Set<string>();
+    orders.forEach(order => {
+      order.items_pedido?.forEach((item: any) => {
+        if (item.productos?.nombre) {
+          products.add(item.productos.nombre);
+        }
+      });
+    });
+    return Array.from(products).sort();
+  }, [orders]);
+
+  // Filtrar pedidos
+  const filteredOrders = useMemo(() => {
+    return orders.filter(order => {
+      // Filtro por producto
+      if (selectedProduct) {
+        const hasProduct = order.items_pedido?.some((item: any) => 
+          item.productos?.nombre === selectedProduct
+        );
+        if (!hasProduct) return false;
+      }
+
+      // Filtro por estado
+      if (selectedStatus && order.estado !== selectedStatus) {
+        return false;
+      }
+
+      // Filtro por búsqueda de texto (nombre del cliente o email)
+      if (searchTerm) {
+        const searchLower = searchTerm.toLowerCase();
+        const matchesName = order.cliente_nombre?.toLowerCase().includes(searchLower);
+        const matchesEmail = order.cliente_email?.toLowerCase().includes(searchLower);
+        if (!matchesName && !matchesEmail) return false;
+      }
+
+      // Filtro por fecha
+      if (startDate || endDate) {
+        const orderDate = new Date(order.fecha_creacion);
+        if (startDate && orderDate < startDate) return false;
+        if (endDate && orderDate > endDate) return false;
+      }
+
+      return true;
+    });
+  }, [orders, selectedProduct, selectedStatus, searchTerm, startDate, endDate]);
+
+  const clearFilters = () => {
+    setSelectedProduct("");
+    setSelectedStatus("");
+    setStartDate(undefined);
+    setEndDate(undefined);
+    setSearchTerm("");
+  };
+
+  const hasActiveFilters = selectedProduct || selectedStatus || startDate || endDate || searchTerm;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -71,7 +145,7 @@ const Pedidos = () => {
       <Navigation />
       
       <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h1 className="text-4xl font-luxury font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">
             Mis Pedidos
           </h1>
@@ -80,15 +154,152 @@ const Pedidos = () => {
           </p>
         </div>
 
-        {orders.length === 0 ? (
+        {/* Filtros */}
+        <Card className="p-6 mb-8 bg-gradient-card shadow-elegant">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-2">
+              <Filter className="h-5 w-5 text-primary" />
+              <h2 className="text-lg font-semibold">Filtros de Pedidos</h2>
+              {hasActiveFilters && (
+                <Badge variant="secondary" className="ml-2">
+                  {filteredOrders.length} de {orders.length}
+                </Badge>
+              )}
+            </div>
+            {hasActiveFilters && (
+              <Button onClick={clearFilters} variant="outline" size="sm">
+                <X className="h-4 w-4 mr-2" />
+                Limpiar Filtros
+              </Button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Búsqueda por texto */}
+            <div className="space-y-2">
+              <Label htmlFor="search">Buscar Cliente</Label>
+              <Input
+                id="search"
+                placeholder="Nombre o email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full"
+              />
+            </div>
+
+            {/* Filtro por producto */}
+            <div className="space-y-2">
+              <Label>Producto</Label>
+              <Select value={selectedProduct} onValueChange={setSelectedProduct}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Todos los productos" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">Todos los productos</SelectItem>
+                  {uniqueProducts.map((product) => (
+                    <SelectItem key={product} value={product}>
+                      {product}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Filtro por estado */}
+            <div className="space-y-2">
+              <Label>Estado</Label>
+              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Todos los estados" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">Todos los estados</SelectItem>
+                  <SelectItem value="pendiente">Pendiente</SelectItem>
+                  <SelectItem value="procesando">Procesando</SelectItem>
+                  <SelectItem value="completado">Completado</SelectItem>
+                  <SelectItem value="cancelado">Cancelado</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Filtros de fecha */}
+            <div className="space-y-2">
+              <Label>Rango de Fechas</Label>
+              <div className="flex space-x-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !startDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {startDate ? format(startDate, "dd/MM", { locale: es }) : "Desde"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={startDate}
+                      onSelect={setStartDate}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
+
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !endDate && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {endDate ? format(endDate, "dd/MM", { locale: es }) : "Hasta"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={endDate}
+                      onSelect={setEndDate}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {filteredOrders.length === 0 ? (
           <div className="text-center py-12">
             <ShoppingBag className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-2xl font-semibold mb-2">No hay pedidos aún</h2>
-            <p className="text-muted-foreground">Cuando realices tu primer pedido, aparecerá aquí.</p>
+            <h2 className="text-2xl font-semibold mb-2">
+              {hasActiveFilters ? "No se encontraron pedidos" : "No hay pedidos aún"}
+            </h2>
+            <p className="text-muted-foreground">
+              {hasActiveFilters 
+                ? "Intenta ajustar los filtros para encontrar lo que buscas." 
+                : "Cuando realices tu primer pedido, aparecerá aquí."
+              }
+            </p>
+            {hasActiveFilters && (
+              <Button onClick={clearFilters} variant="outline" className="mt-4">
+                <X className="h-4 w-4 mr-2" />
+                Limpiar Filtros
+              </Button>
+            )}
           </div>
         ) : (
           <div className="space-y-6">
-            {orders.map((order) => (
+            {filteredOrders.map((order) => (
               <Card key={order.id} className="p-6 bg-gradient-card shadow-elegant">
                 {/* Header del pedido */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
@@ -98,7 +309,7 @@ const Pedidos = () => {
                       <h3 className="text-xl font-semibold">Pedido #{order.id}</h3>
                       <div className="flex items-center text-sm text-muted-foreground space-x-4">
                         <div className="flex items-center space-x-1">
-                          <Calendar className="h-4 w-4" />
+                          <CalendarIcon className="h-4 w-4" />
                           <span>{formatDate(order.fecha_creacion)}</span>
                         </div>
                         <div className="flex items-center space-x-1">
