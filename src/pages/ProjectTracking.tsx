@@ -164,8 +164,8 @@ const ProjectTracking = () => {
     },
     {
       date: "10/08/25",
-      title: "Integración completa de Chatbase",
-      description: "Se implementó la integración completa con Chatbase, incluyendo widget embebido, configuración administrativa, y sistema de gestión de estados.",
+      title: "Integración completa de Chatbase con manejo de secrets",
+      description: "Se corrigió la implementación de Chatbase con script específico por chatbot, manejo de secret key para identity verification, y mejor cleanup de scripts.",
       status: "implemented",
       phase: "chatbase-integration"
     }

@@ -12,8 +12,9 @@ import { useToast } from '@/hooks/use-toast';
 import { Bot, Settings, ExternalLink, AlertCircle, CheckCircle } from 'lucide-react';
 
 const ChatbaseSettings = () => {
-  const { chatbotId, isEnabled, isLoading, error, updateChatbotId, toggleEnabled } = useChatbase();
+  const { chatbotId, secretKey, isEnabled, isLoading, error, updateChatbotId, updateSecretKey, toggleEnabled } = useChatbase();
   const [newChatbotId, setNewChatbotId] = useState(chatbotId || '');
+  const [newSecretKey, setNewSecretKey] = useState('');
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
 
@@ -38,6 +39,35 @@ const ChatbaseSettings = () => {
       toast({
         title: "Error",
         description: "No se pudo guardar la configuración",
+        variant: "destructive"
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveSecretKey = async () => {
+    if (!newSecretKey.trim()) {
+      toast({
+        title: "Error",
+        description: "Por favor ingresa una clave secreta válida",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await updateSecretKey(newSecretKey.trim());
+      setNewSecretKey(''); // Limpiar el campo por seguridad
+      toast({
+        title: "Clave secreta guardada",
+        description: "La clave secreta ha sido actualizada correctamente",
+      });
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "No se pudo guardar la clave secreta",
         variant: "destructive"
       });
     } finally {
@@ -146,6 +176,42 @@ const ChatbaseSettings = () => {
                 Encuentra tu ID de chatbot en el panel de Chatbase
               </p>
             </div>
+
+            <Separator />
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="secretKey">Clave Secreta (Opcional pero Recomendada)</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="secretKey"
+                    type="password"
+                    value={newSecretKey}
+                    onChange={(e) => setNewSecretKey(e.target.value)}
+                    placeholder="Ingresa tu secret key de Chatbase"
+                    className="flex-1"
+                  />
+                  <Button 
+                    onClick={handleSaveSecretKey}
+                    disabled={saving || !newSecretKey.trim()}
+                    variant="outline"
+                  >
+                    {saving ? "Guardando..." : "Guardar"}
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  La secret key permite identity verification y funciones avanzadas como análisis de usuarios
+                </p>
+                {secretKey && (
+                  <div className="flex items-center gap-2 mt-2">
+                    <CheckCircle className="h-3 w-3 text-green-600" />
+                    <p className="text-xs text-green-600">
+                      Clave secreta configurada correctamente
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {chatbotId && (
@@ -153,6 +219,7 @@ const ChatbaseSettings = () => {
               <CheckCircle className="h-4 w-4" />
               <AlertDescription>
                 Chatbot configurado correctamente. ID: <code className="bg-muted px-1 rounded">{chatbotId}</code>
+                {secretKey && " • Clave secreta configurada"}
               </AlertDescription>
             </Alert>
           )}
@@ -183,9 +250,9 @@ const ChatbaseSettings = () => {
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-medium">2</div>
               <div>
-                <p className="font-medium">Obtén el ID del chatbot</p>
+                <p className="font-medium">Obtén tu ID de chatbot y script de embed</p>
                 <p className="text-sm text-muted-foreground">
-                  En tu dashboard de Chatbase, ve a la sección "Embed" y copia el ID de tu chatbot
+                  En tu dashboard de Chatbase, ve a la sección "Connect" → "Embed" y copia el ID de tu chatbot
                 </p>
               </div>
             </div>
@@ -193,9 +260,19 @@ const ChatbaseSettings = () => {
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-medium">3</div>
               <div>
-                <p className="font-medium">Configura e activa</p>
+                <p className="font-medium">Configura la clave secreta (opcional)</p>
                 <p className="text-sm text-muted-foreground">
-                  Pega el ID arriba, guarda los cambios y activa el switch para que aparezca en tu sitio
+                  Para identity verification, agrega tu secret key desde el panel de Chatbase
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-medium">4</div>
+              <div>
+                <p className="font-medium">Activa el widget</p>
+                <p className="text-sm text-muted-foreground">
+                  Guarda los cambios y activa el switch para que aparezca en tu sitio web
                 </p>
               </div>
             </div>
