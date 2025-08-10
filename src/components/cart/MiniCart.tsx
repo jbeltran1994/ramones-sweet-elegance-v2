@@ -1,15 +1,24 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Plus, Minus, ShoppingCart, Trash2 } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
+import { useOrders } from '@/hooks/useOrders';
+import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import CartIcon from './CartIcon';
 
 const MiniCart = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { items, totalAmount, incrementItem, decrementItem, removeItem, clearCart } = useCart();
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [customerName, setCustomerName] = useState('');
+  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const { items, totalAmount, totalItems, incrementItem, decrementItem, removeItem, clearCart } = useCart();
+  const { createOrder, isCreatingOrder } = useOrders();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const formatPrice = (price: number) => {
@@ -20,10 +29,46 @@ const MiniCart = () => {
   };
 
   const handleGoToCheckout = () => {
-    setIsOpen(false);
-    // Aquí podrías navegar a una página de checkout dedicada
-    // navigate('/checkout');
-    console.log('Ir a checkout con items:', items);
+    if (items.length === 0) return;
+    
+    // Si el usuario está logueado, usar su email
+    if (user?.email) {
+      setCustomerEmail(user.email);
+      setCustomerName(user.user_metadata?.full_name || '');
+    }
+    
+    setShowCheckoutForm(true);
+  };
+
+  const handleCreateOrder = async () => {
+    if (!customerEmail.trim() || !customerName.trim()) {
+      return;
+    }
+
+    const orderData = {
+      customer_email: customerEmail.trim(),
+      customer_name: customerName.trim(),
+      items,
+      total_amount: totalAmount,
+      total_items: totalItems
+    };
+
+    const order = await createOrder(orderData);
+    
+    if (order) {
+      // Limpiar carrito y cerrar modal
+      clearCart();
+      setIsOpen(false);
+      setShowCheckoutForm(false);
+      setCustomerEmail('');
+      setCustomerName('');
+      
+      console.log('Pedido creado:', order);
+    }
+  };
+
+  const handleBackToCart = () => {
+    setShowCheckoutForm(false);
   };
 
   return (
@@ -43,7 +88,73 @@ const MiniCart = () => {
         </SheetHeader>
 
         <div className="mt-6 space-y-4">
-          {items.length === 0 ? (
+          {showCheckoutForm ? (
+            // Formulario de checkout
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  placeholder="tu@email.com"
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="name">Nombre *</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  placeholder="Tu nombre completo"
+                  required
+                />
+              </div>
+
+              <Separator />
+
+              {/* Resumen del pedido */}
+              <div className="space-y-2">
+                <h4 className="font-medium">Resumen del pedido:</h4>
+                <div className="text-sm text-muted-foreground space-y-1">
+                  {items.map((item) => (
+                    <div key={item.producto_id} className="flex justify-between">
+                      <span>{item.nombre} x {item.cantidad}</span>
+                      <span>{formatPrice(item.precio * item.cantidad)}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-between font-semibold text-primary">
+                  <span>Total:</span>
+                  <span>{formatPrice(totalAmount)}</span>
+                </div>
+              </div>
+
+              {/* Botones del formulario */}
+              <div className="space-y-2">
+                <Button 
+                  onClick={handleCreateOrder}
+                  disabled={!customerEmail.trim() || !customerName.trim() || isCreatingOrder}
+                  className="w-full bg-gradient-primary hover:opacity-90 transition-smooth"
+                >
+                  {isCreatingOrder ? 'Creando pedido...' : 'Confirmar Pedido'}
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  onClick={handleBackToCart}
+                  className="w-full"
+                  disabled={isCreatingOrder}
+                >
+                  Volver al Carrito
+                </Button>
+              </div>
+            </div>
+          ) : items.length === 0 ? (
             <div className="text-center py-12">
               <ShoppingCart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground">Tu carrito está vacío</p>
