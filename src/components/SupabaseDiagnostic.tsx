@@ -190,6 +190,27 @@ const SupabaseDiagnostic = () => {
         });
       }
 
+      // Verificar tabla mensajes_contacto
+      try {
+        const { count, error } = await (supabase as any)
+          .from('mensajes_contacto')
+          .select('*', { count: 'exact', head: true });
+
+        tablesInfo.push({
+          name: 'mensajes_contacto',
+          recordCount: count || 0,
+          hasRLS: !error,
+          rlsPolicies: []
+        });
+      } catch (error) {
+        tablesInfo.push({
+          name: 'mensajes_contacto',
+          recordCount: 0,
+          hasRLS: false,
+          rlsPolicies: ['⚠️ Tabla no existe - Pendiente de crear']
+        });
+      }
+
       setDiagnostics(prev => ({
         ...prev,
         tablesInfo: {
@@ -257,9 +278,9 @@ const SupabaseDiagnostic = () => {
       
       const testUser = {
         email: `test.${Date.now()}@example.com`,
-        nombre: 'Usuario de Prueba',
+        nombre: 'Usuario de Prueba Diagnóstico',
         telefono: '+34123456789',
-        auth_id: user?.id || null, // Incluir auth_id si hay usuario autenticado
+        auth_user_id: user?.id || null, // Usar auth_user_id en lugar de auth_id
         // fecha_registro se auto-genera con now()
         // id se auto-genera
       };
@@ -283,12 +304,20 @@ const SupabaseDiagnostic = () => {
           }
         }));
       } else {
+        // Limpiar el usuario de prueba creado
+        if (data && data[0]) {
+          await supabase
+            .from('usuarios')
+            .delete()
+            .eq('id', data[0].id);
+        }
+        
         setDiagnostics(prev => ({
           ...prev,
           writeTest: {
             status: 'success',
-            message: 'Escritura exitosa: Usuario creado',
-            details: data
+            message: 'Escritura exitosa: Usuario creado y eliminado',
+            details: { testUserCreated: true, cleaned: true }
           }
         }));
       }
