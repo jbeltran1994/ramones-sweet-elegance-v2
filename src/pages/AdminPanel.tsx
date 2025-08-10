@@ -14,12 +14,8 @@ const AdminPanel = () => {
   const { user } = useAuth();
 
   // Verificar si el usuario tiene permisos de administrador
-  // Lista de usuarios autorizados para acceder al panel administrativo
-  const adminEmails = [
-    "jibeltran1994@gmail.com",
-    "jibeltranpetrungaro@gmail.com"
-  ];
-  const isAdmin = user?.email && adminEmails.includes(user.email);
+  // Solo el usuario jibeltranpetrungaro@gmail.com tiene acceso al panel administrativo
+  const isAdmin = user?.email === "jibeltranpetrungaro@gmail.com";
 
   if (!user) {
     return (

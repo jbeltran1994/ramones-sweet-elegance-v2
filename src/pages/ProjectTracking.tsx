@@ -143,8 +143,8 @@ const ProjectTracking = () => {
     },
     {
       date: "10/08/25",
-      title: "Habilitación de acceso administrativo para usuario adicional",
-      description: "Se liberó el acceso al panel administrativo para jibeltranpetrungaro@gmail.com, ampliando la lista de usuarios autorizados para gestión operativa.",
+      title: "Restricción de acceso administrativo a usuario único",
+      description: "Se restringió el acceso al panel administrativo exclusivamente para jibeltranpetrungaro@gmail.com, removiendo otros usuarios autorizados.",
       status: "implemented",
       phase: "admin-panel"
     }
@@ -298,8 +298,8 @@ const ProjectTracking = () => {
     {
       date: "10/08/25",
       priority: "high",
-      request: "Habilitación de permisos administrativos para segundo usuario",
-      details: "Liberar acceso completo al panel de gestión operativa para jibeltranpetrungaro@gmail.com",
+      request: "Restricción de acceso administrativo a usuario único",
+      details: "Restringir acceso al panel de gestión operativa exclusivamente para jibeltranpetrungaro@gmail.com",
       status: "completed"
     }
   ];
