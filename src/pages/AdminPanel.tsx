@@ -13,9 +13,8 @@ import { useAuth } from "@/hooks/useAuth";
 const AdminPanel = () => {
   const { user } = useAuth();
 
-  // Verificar si el usuario tiene permisos de administrador
-  // Solo el usuario jibeltranpetrungaro@gmail.com tiene acceso al panel administrativo
-  const isAdmin = user?.email === "jibeltranpetrungaro@gmail.com";
+  // Permitir acceso a cualquier usuario autenticado
+  const isAdmin = !!user;
 
   if (!user) {
     return (

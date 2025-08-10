@@ -154,6 +154,13 @@ const ProjectTracking = () => {
       description: "Se agregó la funcionalidad 'Olvidé mi contraseña' en la página de autenticación, permitiendo a los usuarios recuperar el acceso a sus cuentas.",
       status: "implemented",
       phase: "auth"
+    },
+    {
+      date: "10/08/25",
+      title: "Liberación completa del acceso administrativo",
+      description: "Se removió la restricción de usuario específico, permitiendo que cualquier usuario autenticado acceda al panel de gestión operativa.",
+      status: "implemented",
+      phase: "admin-panel"
     }
   ];
 
@@ -314,6 +321,13 @@ const ProjectTracking = () => {
       priority: "medium",
       request: "Implementar funcionalidad de recuperación de contraseña",
       details: "Agregar la opción 'Olvidé mi contraseña' en el formulario de inicio de sesión",
+      status: "completed"
+    },
+    {
+      date: "10/08/25",
+      priority: "high",
+      request: "Liberación completa del acceso administrativo",
+      details: "Quitar todas las restricciones de usuario para el acceso a gestión operativa y sus apartados",
       status: "completed"
     }
   ];
