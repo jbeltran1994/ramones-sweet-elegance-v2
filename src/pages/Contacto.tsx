@@ -35,11 +35,15 @@ const Contacto = () => {
     setIsSubmitting(true);
 
     try {
+      console.log('🔵 Starting form submission with data:', formData);
       // Validate form data
       const validatedData = contactFormSchema.parse(formData);
+      console.log('✅ Form data validated:', validatedData);
       
       // Save message to database
+      console.log('🔄 Calling createContactMessage...');
       const result = await createContactMessage(validatedData);
+      console.log('📋 createContactMessage result:', result);
       
       if (result) {
         // Reset form only if message was saved successfully
@@ -51,18 +55,21 @@ const Contacto = () => {
         });
       }
     } catch (error: any) {
+      console.error('🔴 Error in handleSubmit:', error);
       if (error.errors) {
         // Show validation errors
         const firstError = error.errors[0];
+        console.error('📝 Validation error:', firstError);
         toast({
           title: "Error en el formulario",
           description: firstError.message,
           variant: "destructive"
         });
       } else {
+        console.error('💀 Unknown error:', error);
         toast({
           title: "Error",
-          description: "Hubo un problema al enviar el mensaje. Intenta nuevamente.",
+          description: `Hubo un problema al enviar el mensaje: ${error.message || 'Error desconocido'}`,
           variant: "destructive"
         });
       }

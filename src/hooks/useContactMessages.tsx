@@ -21,8 +21,10 @@ export const useContactMessages = () => {
   const { toast } = useToast();
 
   const createContactMessage = async (messageData: ContactFormData): Promise<ContactMessage | null> => {
+    console.log('🔍 createContactMessage called with:', messageData);
     setIsCreating(true);
     try {
+      console.log('📤 Attempting to insert into mensajes_contacto...');
       const { data, error } = await (supabase as any)
         .from('mensajes_contacto')
         .insert([{
@@ -35,15 +37,19 @@ export const useContactMessages = () => {
         .select()
         .single();
 
+      console.log('📥 Supabase response:', { data, error });
+
       if (error) {
-        console.error('Error creating contact message:', error);
+        console.error('❌ Supabase error creating contact message:', error);
         toast({
           title: "Error",
-          description: "No se pudo enviar el mensaje. Intenta nuevamente.",
+          description: `Error de base de datos: ${error.message || 'Problema al guardar el mensaje'}`,
           variant: "destructive"
         });
         return null;
       }
+
+      console.log('✅ Message created successfully:', data);
 
       toast({
         title: "¡Mensaje enviado!",
@@ -52,10 +58,10 @@ export const useContactMessages = () => {
 
       return data;
     } catch (error) {
-      console.error('Unexpected error:', error);
+      console.error('💥 Unexpected error in createContactMessage:', error);
       toast({
         title: "Error",
-        description: "Ocurrió un error inesperado. Intenta nuevamente.",
+        description: `Error inesperado: ${error instanceof Error ? error.message : 'Problema desconocido'}`,
         variant: "destructive"
       });
       return null;

@@ -538,6 +538,14 @@ Entrega: arquitectura, modelo de datos, pantallas con diseño UI/UX, y la estruc
       description: "Creación de tabla mensajes_contacto en Supabase e integración completa del flujo operativo",
       outcome: "Tabla creada con RLS, hook actualizado para usar Supabase real, flujo completo de gestión de mensajes funcionando",
       status: "completed"
+    },
+    {
+      date: "2025-01-14",
+      type: "debugging",
+      prompt: "sigue habiendo un error a la hora de intentar enviar el mensaje",
+      description: "Usuario reporta error persistente en formulario de contacto después de la integración con Supabase",
+      outcome: "Agregado logging detallado para diagnosticar el problema específico. Investigando causa raíz.",
+      status: "in-progress"
     }
   ];
 
