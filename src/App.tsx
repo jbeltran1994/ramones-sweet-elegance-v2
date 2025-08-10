@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/hooks/useCart";
 import { ChatbaseProvider } from "@/hooks/useChatbase";
-import ChatbaseWidget from "@/components/ChatbaseWidget";
+import { ChatbaseWidget } from "@/components/ChatbaseWidget";
 import Index from "./pages/Index";
 import Catalogo from "./pages/Catalogo";
 import Pedidos from "./pages/Pedidos";
