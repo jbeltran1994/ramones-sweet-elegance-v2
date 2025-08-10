@@ -16,14 +16,14 @@ const ChatbaseWidget = () => {
       // @ts-ignore
       if (!window.chatbase || window.chatbase("getState") !== "initialized") {
         // @ts-ignore
-        window.chatbase = (...arguments) => {
+        window.chatbase = (...args) => {
           // @ts-ignore
           if (!window.chatbase.q) {
             // @ts-ignore
             window.chatbase.q = [];
           }
           // @ts-ignore
-          window.chatbase.q.push(arguments);
+          window.chatbase.q.push(args);
         };
         
         // @ts-ignore
