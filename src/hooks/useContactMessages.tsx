@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import type { ContactFormData } from "@/lib/validations";
 
@@ -14,57 +15,47 @@ export interface ContactMessage {
   respuesta?: string;
 }
 
-// Temporary mock data - TODO: Replace with Supabase integration when table is created
-const mockMessages: ContactMessage[] = [
-  {
-    id: 1,
-    nombre: "Ana García",
-    telefono: "+598 99 123 456",
-    email: "ana.garcia@email.com",
-    mensaje: "Hola! Quisiera hacer un pedido especial para el cumpleaños de mi hija.",
-    estado: "pendiente",
-    fecha_creacion: new Date().toISOString()
-  }
-];
-
-let messageIdCounter = 2;
-
 export const useContactMessages = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [messages, setMessages] = useState<ContactMessage[]>(mockMessages);
   const { toast } = useToast();
 
   const createContactMessage = async (messageData: ContactFormData): Promise<ContactMessage | null> => {
     setIsCreating(true);
     try {
-      // TODO: Replace with actual Supabase integration when table is created
-      const newMessage: ContactMessage = {
-        id: messageIdCounter++,
-        nombre: messageData.nombre,
-        telefono: messageData.telefono,
-        email: messageData.email,
-        mensaje: messageData.mensaje,
-        estado: 'pendiente',
-        fecha_creacion: new Date().toISOString()
-      };
+      const { data, error } = await (supabase as any)
+        .from('mensajes_contacto')
+        .insert([{
+          nombre: messageData.nombre,
+          telefono: messageData.telefono,
+          email: messageData.email,
+          mensaje: messageData.mensaje,
+          estado: 'pendiente'
+        }])
+        .select()
+        .single();
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setMessages(prev => [newMessage, ...prev]);
+      if (error) {
+        console.error('Error creating contact message:', error);
+        toast({
+          title: "Error",
+          description: "No se pudo enviar el mensaje. Intenta nuevamente.",
+          variant: "destructive"
+        });
+        return null;
+      }
 
       toast({
         title: "¡Mensaje enviado!",
         description: "Gracias por contactarnos. Te responderemos pronto.",
       });
 
-      return newMessage;
+      return data;
     } catch (error) {
-      console.error('Error creating contact message:', error);
+      console.error('Unexpected error:', error);
       toast({
         title: "Error",
-        description: "No se pudo enviar el mensaje. Intenta nuevamente.",
+        description: "Ocurrió un error inesperado. Intenta nuevamente.",
         variant: "destructive"
       });
       return null;
@@ -76,11 +67,24 @@ export const useContactMessages = () => {
   const getContactMessages = async (): Promise<ContactMessage[]> => {
     setIsLoading(true);
     try {
-      // TODO: Replace with actual Supabase query when table is created
-      await new Promise(resolve => setTimeout(resolve, 300));
-      return messages;
+      const { data, error } = await (supabase as any)
+        .from('mensajes_contacto')
+        .select('*')
+        .order('fecha_creacion', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching contact messages:', error);
+        toast({
+          title: "Error",
+          description: "No se pudieron cargar los mensajes.",
+          variant: "destructive"
+        });
+        return [];
+      }
+
+      return data || [];
     } catch (error) {
-      console.error('Error fetching contact messages:', error);
+      console.error('Unexpected error:', error);
       return [];
     } finally {
       setIsLoading(false);
@@ -89,12 +93,20 @@ export const useContactMessages = () => {
 
   const updateMessageStatus = async (messageId: number, newStatus: ContactMessage['estado']): Promise<boolean> => {
     try {
-      // TODO: Replace with actual Supabase update when table is created
-      setMessages(prev => 
-        prev.map(msg => 
-          msg.id === messageId ? { ...msg, estado: newStatus } : msg
-        )
-      );
+      const { error } = await (supabase as any)
+        .from('mensajes_contacto')
+        .update({ estado: newStatus })
+        .eq('id', messageId);
+
+      if (error) {
+        console.error('Error updating message status:', error);
+        toast({
+          title: "Error",
+          description: "No se pudo actualizar el estado del mensaje.",
+          variant: "destructive"
+        });
+        return false;
+      }
 
       toast({
         title: "Estado actualizado",
@@ -102,29 +114,35 @@ export const useContactMessages = () => {
       });
       return true;
     } catch (error) {
-      console.error('Error updating message status:', error);
+      console.error('Unexpected error:', error);
       return false;
     }
   };
 
   const respondToMessage = async (messageId: number, response: string): Promise<boolean> => {
     try {
-      // TODO: Replace with actual Supabase update when table is created
-      setMessages(prev => 
-        prev.map(msg => 
-          msg.id === messageId 
-            ? { 
-                ...msg, 
-                estado: 'respondido' as const,
-                respuesta: response,
-                fecha_respuesta: new Date().toISOString()
-              } 
-            : msg
-        )
-      );
+      const { error } = await (supabase as any)
+        .from('mensajes_contacto')
+        .update({ 
+          estado: 'respondido',
+          respuesta: response,
+          fecha_respuesta: new Date().toISOString()
+        })
+        .eq('id', messageId);
+
+      if (error) {
+        console.error('Error responding to message:', error);
+        toast({
+          title: "Error",
+          description: "No se pudo enviar la respuesta.",
+          variant: "destructive"
+        });
+        return false;
+      }
+
       return true;
     } catch (error) {
-      console.error('Error responding to message:', error);
+      console.error('Unexpected error:', error);
       return false;
     }
   };
@@ -135,7 +153,6 @@ export const useContactMessages = () => {
     updateMessageStatus,
     respondToMessage,
     isCreating,
-    isLoading,
-    messages // Export messages for component use
+    isLoading
   };
 };

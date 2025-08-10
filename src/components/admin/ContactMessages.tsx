@@ -20,7 +20,7 @@ const ContactMessages = () => {
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
   const [responseText, setResponseText] = useState("");
   const { toast } = useToast();
-  const { getContactMessages, updateMessageStatus, respondToMessage, isLoading, messages: hookMessages } = useContactMessages();
+  const { getContactMessages, updateMessageStatus, respondToMessage, isLoading } = useContactMessages();
 
   useEffect(() => {
     loadMessages();
@@ -31,12 +31,6 @@ const ContactMessages = () => {
     setMessages(fetchedMessages);
     setFilteredMessages(fetchedMessages);
   };
-
-  // Also update when hook messages change
-  useEffect(() => {
-    setMessages(hookMessages);
-    setFilteredMessages(hookMessages);
-  }, [hookMessages]);
 
   useEffect(() => {
     let filtered = messages;
