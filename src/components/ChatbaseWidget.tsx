@@ -43,7 +43,7 @@ export const ChatbaseWidget = () => {
     const onLoad = () => {
       const script = document.createElement("script");
       script.src = "https://www.chatbase.co/embed.min.js";
-      script.id = chatbotId;
+      script.id = ME-qZh_caXMauEwvUSSJv;
       script.setAttribute('domain', 'www.chatbase.co');
       document.body.appendChild(script);
     };
