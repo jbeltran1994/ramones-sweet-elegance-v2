@@ -345,7 +345,7 @@ const Pedidos = () => {
                       {order.items_pedido.map((item: any) => (
                         <div key={item.id} className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
                           <div className="flex items-center space-x-3">
-                            <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center">
+                            <div className="w-12 h-12 bg-cta-primary rounded-lg flex items-center justify-center">
                               <span className="text-white font-bold">
                                 {item.productos?.nombre?.charAt(0) || 'P'}
                               </span>

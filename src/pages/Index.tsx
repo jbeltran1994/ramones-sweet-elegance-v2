@@ -37,7 +37,7 @@ const Index = () => {
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="xl" className="border-2 border-cta-primary text-cta-primary hover:bg-cta-primary hover:text-primary-foreground bg-background font-bold">
+                <Button asChild variant="outline" size="xl" className="border-2 border-cta-primary text-cta-primary hover:bg-cta-primary hover:text-white bg-transparent font-bold">
                   <Link to="/contacto">PEDIDO PERSONALIZADO</Link>
                 </Button>
               </div>
@@ -81,7 +81,7 @@ const Index = () => {
           <FeaturedProducts />
 
           <div className="text-center">
-            <Button asChild variant="outline" size="lg" className="border-cta-primary text-cta-primary hover:bg-cta-primary hover:text-primary-foreground">
+            <Button asChild variant="outline" size="lg" className="border-cta-primary text-cta-primary hover:bg-cta-primary hover:text-white">
               <Link to="/catalogo">VER TODOS LOS PRODUCTOS</Link>
             </Button>
           </div>

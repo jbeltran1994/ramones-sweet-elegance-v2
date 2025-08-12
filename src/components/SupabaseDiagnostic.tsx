@@ -398,7 +398,7 @@ const SupabaseDiagnostic = () => {
       case 'loading':
         return <Badge variant="secondary">Cargando...</Badge>;
       case 'success':
-        return <Badge className="bg-green-500 text-white">OK</Badge>;
+        return <Badge className="bg-success text-success-foreground">OK</Badge>;
       case 'error':
         return <Badge variant="destructive">ERROR</Badge>;
     }

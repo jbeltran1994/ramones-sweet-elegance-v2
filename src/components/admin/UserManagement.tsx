@@ -82,7 +82,7 @@ const UserManagement = () => {
               <Card key={user.id} className="p-4 bg-background/50">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-cta-primary rounded-full flex items-center justify-center">
                       <UserCheck className="h-6 w-6 text-white" />
                     </div>
                     
