@@ -233,7 +233,8 @@ const MiniCart = () => {
                 <div className="space-y-2">
                   <Button 
                     onClick={handleGoToCheckout}
-                    className="w-full bg-gradient-primary hover:opacity-90 transition-smooth"
+                    variant="cta"
+                    className="w-full"
                   >
                     Ir a Checkout
                   </Button>
