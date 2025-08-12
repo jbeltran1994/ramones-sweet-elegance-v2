@@ -138,7 +138,8 @@ const MiniCart = () => {
                 <Button 
                   onClick={handleCreateOrder}
                   disabled={!customerEmail.trim() || !customerName.trim() || isCreatingOrder}
-                  className="w-full bg-gradient-primary hover:opacity-90 transition-smooth"
+                  variant="cta"
+                  className="w-full"
                 >
                   {isCreatingOrder ? 'Creando pedido...' : 'Confirmar Pedido'}
                 </Button>
