@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowRight, Star, Heart, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-ramones.jpg";
+import FeaturedProducts from "@/components/FeaturedProducts";
 
 const Index = () => {
   return (
@@ -77,61 +78,7 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <Card className="overflow-hidden bg-background shadow-elegant hover:shadow-cta transition-smooth border-2 border-transparent hover:border-cta-primary/20">
-              <div className="aspect-square bg-muted relative">
-                <div className="absolute top-4 right-4 bg-cta-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-bold">
-                  ¡MÁS VENDIDO!
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-luxury font-bold mb-2">Tiramisú Premium</h3>
-                <p className="text-muted-foreground text-sm mb-4">Clásico italiano con mascarpone artesanal y café premium</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-price-highlight">$45.00</span>
-                  <Button variant="cta" size="sm" className="shadow-cta">
-                    AGREGAR
-                  </Button>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="overflow-hidden bg-background shadow-elegant hover:shadow-cta transition-smooth border-2 border-transparent hover:border-cta-primary/20">
-              <div className="aspect-square bg-muted relative">
-                <div className="absolute top-4 right-4 bg-success text-success-foreground px-3 py-1 rounded-full text-sm font-bold">
-                  NUEVO
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-luxury font-bold mb-2">Cheesecake de Frutos Rojos</h3>
-                <p className="text-muted-foreground text-sm mb-4">Base de galleta artesanal con frutos rojos frescos</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-price-highlight">$42.00</span>
-                  <Button variant="cta" size="sm" className="shadow-cta">
-                    AGREGAR
-                  </Button>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="overflow-hidden bg-background shadow-elegant hover:shadow-cta transition-smooth border-2 border-transparent hover:border-cta-primary/20">
-              <div className="aspect-square bg-muted relative">
-                <div className="absolute top-4 right-4 bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-bold">
-                  PREMIUM
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-luxury font-bold mb-2">Macarons Franceses</h3>
-                <p className="text-muted-foreground text-sm mb-4">Caja de 12 unidades con sabores exclusivos</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-price-highlight">$38.00</span>
-                  <Button variant="cta" size="sm" className="shadow-cta">
-                    AGREGAR
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          </div>
+          <FeaturedProducts />
 
           <div className="text-center">
             <Button asChild variant="outline" size="lg" className="border-cta-primary text-cta-primary hover:bg-cta-primary hover:text-primary-foreground">
