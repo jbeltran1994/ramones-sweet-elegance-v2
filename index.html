@@ -9,10 +9,28 @@
     <meta name="keywords" content="postres premium, boutique, artesanal, pastelería francesa, tortas personalizadas, macarons, Santiago">
     <link rel="canonical" href="https://ramones.lovable.app" />
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts - Optimized for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Load fonts asynchronously to prevent render blocking -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"></noscript>
+
+    <!-- Critical CSS loading optimization -->
+    <script>
+      // Load CSS asynchronously to prevent render blocking
+      (function() {
+        var link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'style';
+        link.href = '/src/index.css';
+        link.onload = function() {
+          this.rel = 'stylesheet';
+          this.onload = null;
+        };
+        document.head.appendChild(link);
+      })();
+    </script>
 
     <!-- Open Graph -->
     <meta property="og:title" content="Ramones Boutique - Postres Artesanales Premium" />
