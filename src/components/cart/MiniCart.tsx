@@ -75,9 +75,7 @@ const MiniCart = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <div>
-          <CartIcon onClick={() => setIsOpen(true)} />
-        </div>
+        <CartIcon onClick={() => setIsOpen(true)} />
       </SheetTrigger>
       
       <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto">
