@@ -168,6 +168,29 @@ const ProjectTracking = () => {
       description: "Se corrigió la implementación de Chatbase con script específico por chatbot, manejo de secret key para identity verification, y mejor cleanup de scripts.",
       status: "implemented",
       phase: "chatbase-integration"
+    },
+    
+    // === OPTIMIZACIÓN PARA CONVERSIÓN (12/08/25) ===
+    {
+      date: "12/08/25",
+      title: "Rediseño completo orientado a conversión y ventas",
+      description: "Implementación de nueva paleta de rojo pastel eliminando degradados, botones sólidos de alto contraste, CTAs prominentes más grandes, sección de productos destacados con precios resaltados, y optimización móvil para mejor conversión.",
+      status: "implemented",
+      phase: "conversion-optimization"
+    },
+    {
+      date: "12/08/25",
+      title: "Productos destacados dinámicos en página principal",
+      description: "Creación del componente FeaturedProducts que carga productos reales desde Supabase con imágenes, precios destacados, badges dinámicos y controles de carrito funcionales, reemplazando contenido hardcodeado.",
+      status: "implemented",
+      phase: "conversion-optimization"
+    },
+    {
+      date: "12/08/25",
+      title: "Sistema de tokens de diseño para conversión",
+      description: "Implementación de tokens semánticos específicos para conversión: --cta-primary, --cta-secondary, --price-highlight, --shadow-cta, eliminando gradientes y priorizando colores sólidos de alto contraste.",
+      status: "implemented",
+      phase: "conversion-optimization"
     }
   ];
 
@@ -240,6 +263,27 @@ const ProjectTracking = () => {
       title: "Error en formulario de contacto con columnas inexistentes",
       description: "Error PGRST204: 'Could not find the auth_user_id column of mensajes_contacto in the schema cache'. El hook useContactMessages intentaba insertar campos user_id y auth_user_id que no existen en la tabla.",
       resolution: "Se eliminaron las referencias a user_id y auth_user_id del insert, dejando solo los campos que existen en la tabla: nombre, telefono, email, mensaje, estado. Ahora permite envío de mensajes anónimos sin autenticación.",
+      status: "resolved"
+    },
+    {
+      date: "12/08/25",
+      title: "Botón de pedido personalizado invisible por falta de contraste",
+      description: "El botón 'PEDIDO PERSONALIZADO' aparecía en blanco sin texto visible debido a colores insuficientes de contraste con el nuevo diseño de rojo pastel.",
+      resolution: "Se agregaron estilos específicos con bg-background, colores explícitos text-cta-primary, y border-2 border-cta-primary para asegurar contraste adecuado en todos los estados del botón.",
+      status: "resolved"
+    },
+    {
+      date: "12/08/25",
+      title: "Superposición de imagen hero sobre botones CTA",
+      description: "La imagen del hero se superponía sobre los botones de llamada a la acción debido a conflictos de z-index y posicionamiento, especialmente en dispositivos móviles.",
+      resolution: "Se implementó sistema de z-index específico (z-10, z-20, z-30) y se reorganizó el orden de elementos con order-first lg:order-last, además de background blur con -z-10 para la imagen de fondo.",
+      status: "resolved"
+    },
+    {
+      date: "12/08/25",
+      title: "Ausencia de imágenes de productos en página principal",
+      description: "Los productos destacados en la página principal mostraban contenido hardcodeado sin imágenes reales, reduciendo el impacto visual y conversión.",
+      resolution: "Se desarrolló componente FeaturedProducts que carga productos reales desde Supabase con imagen_url, manejo de errores de carga de imágenes, y fallback visual cuando no hay imagen disponible.",
       status: "resolved"
     }
   ];
@@ -342,6 +386,13 @@ const ProjectTracking = () => {
       priority: "high",
       request: "Integración completa de Chatbase",
       details: "Incorporar la estructura necesaria para conectarse con Chatbase, hacer la integración y crear documentación completa",
+      status: "completed"
+    },
+    {
+      date: "12/08/25",
+      priority: "high",
+      request: "Optimización del diseño para conversión y ventas",
+      details: "Rediseñar la aplicación con paleta de rojo pastel, eliminar degradados, usar botones sólidos de alto contraste, aumentar protagonismo de CTAs, resaltar precios, agregar sección de productos destacados, y optimizar versión móvil",
       status: "completed"
     }
   ];
