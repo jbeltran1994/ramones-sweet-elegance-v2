@@ -8,49 +8,54 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Ramones Premium Pastel Palette */
-    --background: 35 100% 98%;
-    --foreground: 25 15% 25%;
+    /* Conversion-Optimized Red Pastel Palette */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 15%;
 
-    --card: 35 100% 99%;
-    --card-foreground: 25 15% 25%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
 
-    --popover: 35 100% 99%;
-    --popover-foreground: 25 15% 25%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
 
-    /* Primary: Elegant Rose Gold */
-    --primary: 15 65% 75%;
-    --primary-foreground: 35 100% 98%;
-    --primary-glow: 15 85% 85%;
+    /* Primary: Soft Red Pastel for CTAs */
+    --primary: 355 70% 80%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 355 85% 85%;
 
-    /* Secondary: Soft Lavender */
-    --secondary: 280 30% 92%;
-    --secondary-foreground: 25 15% 25%;
+    /* Secondary: Light Neutral */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 20%;
 
-    /* Muted: Warm Cream */
-    --muted: 45 25% 94%;
-    --muted-foreground: 25 8% 45%;
+    /* Muted: Warm Light Gray */
+    --muted: 20 5% 95%;
+    --muted-foreground: 0 0% 45%;
 
-    /* Accent: Champagne Gold */
-    --accent: 45 55% 88%;
-    --accent-foreground: 25 15% 25%;
+    /* Accent: Deeper Red for Highlights */
+    --accent: 355 60% 65%;
+    --accent-foreground: 0 0% 98%;
+
+    /* Success: Conversion Green */
+    --success: 120 40% 70%;
+    --success-foreground: 0 0% 98%;
 
     --destructive: 0 65% 70%;
-    --destructive-foreground: 35 100% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 35 20% 90%;
-    --input: 35 15% 92%;
-    --ring: 15 65% 75%;
+    --border: 0 0% 90%;
+    --input: 0 0% 94%;
+    --ring: 355 70% 80%;
 
-    /* Premium Design Tokens */
-    --gradient-hero: linear-gradient(135deg, hsl(15 65% 75%), hsl(280 30% 92%));
-    --gradient-card: linear-gradient(180deg, hsl(35 100% 99%), hsl(35 25% 96%));
-    --gradient-accent: linear-gradient(90deg, hsl(45 55% 88%), hsl(15 85% 85%));
+    /* Premium Design Tokens - No Gradients */
+    --cta-primary: 355 75% 75%;
+    --cta-secondary: 355 60% 65%;
+    --price-highlight: 355 65% 70%;
     
     /* Elegant Shadows */
-    --shadow-elegant: 0 8px 30px -8px hsl(15 65% 75% / 0.15);
-    --shadow-premium: 0 20px 40px -12px hsl(15 65% 75% / 0.25);
-    --shadow-soft: 0 4px 20px -4px hsl(35 20% 90% / 0.3);
+    --shadow-elegant: 0 8px 30px -8px hsl(355 70% 80% / 0.15);
+    --shadow-premium: 0 20px 40px -12px hsl(355 70% 80% / 0.25);
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 90% / 0.3);
+    --shadow-cta: 0 4px 15px -2px hsl(355 70% 80% / 0.4);
 
     /* Smooth Transitions */
     --transition-elegant: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -76,41 +81,46 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Dark mode with warm tones for premium feel */
-    --background: 25 15% 8%;
-    --foreground: 35 15% 92%;
+    /* Dark mode with conversion-focused design */
+    --background: 0 0% 8%;
+    --foreground: 0 0% 92%;
 
-    --card: 25 15% 10%;
-    --card-foreground: 35 15% 92%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 92%;
 
-    --popover: 25 15% 10%;
-    --popover-foreground: 35 15% 92%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 92%;
 
-    --primary: 15 65% 75%;
-    --primary-foreground: 25 15% 8%;
-    --primary-glow: 15 85% 85%;
+    --primary: 355 70% 80%;
+    --primary-foreground: 0 0% 8%;
+    --primary-glow: 355 85% 85%;
 
-    --secondary: 280 15% 20%;
-    --secondary-foreground: 35 15% 92%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 92%;
 
-    --muted: 25 10% 15%;
-    --muted-foreground: 35 8% 65%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 45 35% 25%;
-    --accent-foreground: 35 15% 92%;
+    --accent: 355 60% 65%;
+    --accent-foreground: 0 0% 92%;
+
+    --success: 120 40% 70%;
+    --success-foreground: 0 0% 98%;
 
     --destructive: 0 65% 70%;
-    --destructive-foreground: 35 15% 92%;
+    --destructive-foreground: 0 0% 92%;
 
-    --border: 25 10% 18%;
-    --input: 25 10% 18%;
-    --ring: 15 65% 75%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 355 70% 80%;
 
-    /* Dark mode gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(15 65% 75%), hsl(280 30% 30%));
-    --gradient-card: linear-gradient(180deg, hsl(25 15% 10%), hsl(25 10% 8%));
+    /* Dark mode tokens */
+    --cta-primary: 355 75% 75%;
+    --cta-secondary: 355 60% 65%;
+    --price-highlight: 355 65% 70%;
     --shadow-elegant: 0 8px 30px -8px hsl(0 0% 0% / 0.4);
     --shadow-premium: 0 20px 40px -12px hsl(0 0% 0% / 0.6);
+    --shadow-cta: 0 4px 15px -2px hsl(355 70% 80% / 0.4);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

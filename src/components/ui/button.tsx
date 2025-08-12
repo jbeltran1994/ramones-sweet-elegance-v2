@@ -9,22 +9,25 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 transition-elegant",
+        default: "bg-cta-primary text-primary-foreground hover:bg-cta-secondary shadow-cta hover:shadow-premium transition-smooth font-medium",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-elegant",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-smooth",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-elegant",
+          "border-2 border-cta-primary bg-background text-cta-primary hover:bg-cta-primary hover:text-primary-foreground transition-smooth font-medium",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-elegant",
-        ghost: "hover:bg-accent hover:text-accent-foreground transition-elegant",
-        link: "text-primary underline-offset-4 hover:underline transition-elegant",
-        premium: "bg-gradient-accent text-accent-foreground hover:shadow-elegant border border-primary/20 transition-elegant font-elegant",
-        hero: "bg-gradient-hero text-primary-foreground hover:shadow-premium border-0 transition-elegant font-elegant",
+          "bg-secondary text-secondary-foreground hover:bg-muted transition-smooth",
+        ghost: "hover:bg-accent/10 hover:text-accent transition-smooth",
+        link: "text-cta-primary underline-offset-4 hover:underline transition-smooth",
+        cta: "bg-cta-primary text-primary-foreground hover:bg-cta-secondary shadow-cta hover:shadow-premium transition-smooth font-bold tracking-wide",
+        premium: "bg-accent text-accent-foreground hover:bg-accent/90 shadow-elegant transition-smooth font-elegant",
+        hero: "bg-cta-primary text-primary-foreground hover:bg-cta-secondary shadow-premium transition-smooth font-bold text-lg",
+        success: "bg-success text-success-foreground hover:bg-success/90 shadow-soft transition-smooth font-medium",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        lg: "h-12 rounded-md px-10 text-base",
+        xl: "h-14 rounded-lg px-12 text-lg",
         icon: "h-10 w-10",
       },
     },

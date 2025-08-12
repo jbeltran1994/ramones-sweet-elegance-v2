@@ -57,6 +57,17 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				success: {
+					DEFAULT: 'hsl(var(--success))',
+					foreground: 'hsl(var(--success-foreground))'
+				},
+				cta: {
+					primary: 'hsl(var(--cta-primary))',
+					secondary: 'hsl(var(--cta-secondary))'
+				},
+				price: {
+					highlight: 'hsl(var(--price-highlight))'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -68,16 +79,11 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				}
 			},
-			backgroundImage: {
-				'gradient-hero': 'var(--gradient-hero)',
-				'gradient-card': 'var(--gradient-card)',
-				'gradient-accent': 'var(--gradient-accent)',
-				'gradient-primary': 'var(--gradient-hero)', // Usar el mismo gradiente hero como primary
-			},
 			boxShadow: {
 				'elegant': 'var(--shadow-elegant)',
 				'premium': 'var(--shadow-premium)',
 				'soft': 'var(--shadow-soft)',
+				'cta': 'var(--shadow-cta)',
 			},
 			transitionTimingFunction: {
 				'elegant': 'var(--transition-elegant)',
