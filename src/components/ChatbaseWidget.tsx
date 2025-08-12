@@ -45,7 +45,20 @@ export const ChatbaseWidget = () => {
       script.src = "https://www.chatbase.co/embed.min.js";
       script.id = chatbotId;
       script.setAttribute('domain', 'www.chatbase.co');
+      script.setAttribute('chatbot-id', chatbotId);
+      script.setAttribute('data-minimizable', 'true');
       document.body.appendChild(script);
+      
+      // Configure chatbase after script loads
+      script.onload = () => {
+        if (window.chatbase) {
+          window.chatbase('init', {
+            chatbotId: chatbotId,
+            minimizable: true,
+            startMinimized: false
+          });
+        }
+      };
     };
 
     if (document.readyState === "complete") {
