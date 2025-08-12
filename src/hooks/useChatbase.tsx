@@ -15,24 +15,25 @@ interface ChatbaseContextType {
 const ChatbaseContext = createContext<ChatbaseContextType | undefined>(undefined);
 
 export const ChatbaseProvider = ({ children }: { children: ReactNode }) => {
-  const [chatbotId, setChatbotId] = useState<string | null>(null);
+  const [chatbotId, setChatbotId] = useState<string | null>("ME-qZh_caXMauEwvUSSJv");
   const [secretKey, setSecretKey] = useState<string | null>(null);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Cargar configuración desde localStorage al inicio
+  // Configuración fija para Chatbase
   useEffect(() => {
     const loadChatbaseConfig = async () => {
       try {
-        // Intentar cargar desde Supabase secrets (si está disponible)
-        // Por ahora usaremos localStorage como fallback
+        // Mantener ID del chatbot y estado activado fijos
+        setChatbotId("ME-qZh_caXMauEwvUSSJv");
+        setIsEnabled(true);
+        
+        // Solo cargar la clave secreta desde localStorage si existe
         const savedConfig = localStorage.getItem('chatbase-config');
         if (savedConfig) {
           const config = JSON.parse(savedConfig);
-          setChatbotId(config.chatbotId || null);
           setSecretKey(config.secretKey || null);
-          setIsEnabled(config.isEnabled || false);
         }
       } catch (err) {
         console.error('Error loading Chatbase config:', err);
