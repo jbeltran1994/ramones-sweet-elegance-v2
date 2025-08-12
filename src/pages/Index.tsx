@@ -12,9 +12,9 @@ const Index = () => {
       
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="container mx-auto px-4 py-20 lg:py-32">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8 animate-slide-up">
+        <div className="container mx-auto px-4 py-20 lg:py-32 relative z-20">
+          <div className="grid lg:grid-cols-2 gap-12 items-center relative">
+            <div className="space-y-8 animate-slide-up relative z-30">
               <div>
                 <h1 className="text-5xl lg:text-6xl font-luxury font-bold leading-tight">
                   <span className="text-cta-primary">
@@ -29,14 +29,14 @@ const Index = () => {
                 </p>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 relative z-10">
                 <Button asChild variant="cta" size="xl" className="group shadow-cta">
                   <Link to="/catalogo">
                     VER CATÁLOGO COMPLETO
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="xl">
+                <Button asChild variant="outline" size="xl" className="border-2 border-cta-primary text-cta-primary hover:bg-cta-primary hover:text-primary-foreground bg-background font-bold">
                   <Link to="/contacto">PEDIDO PERSONALIZADO</Link>
                 </Button>
               </div>
@@ -53,8 +53,8 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="relative animate-fade-in">
-              <div className="absolute inset-0 bg-cta-primary/20 rounded-3xl blur-3xl opacity-30 animate-float"></div>
+            <div className="relative animate-fade-in order-first lg:order-last">
+              <div className="absolute inset-0 bg-cta-primary/20 rounded-3xl blur-3xl opacity-30 animate-float -z-10"></div>
               <img 
                 src={heroImage}
                 alt="Exquisitos postres artesanales de Ramones Boutique"
@@ -203,10 +203,10 @@ const Index = () => {
               algo especial solo para ti.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild variant="secondary" size="xl" className="bg-background text-cta-primary hover:bg-background/90 font-bold">
+              <Button asChild variant="secondary" size="xl" className="bg-background text-cta-primary hover:bg-background/90 font-bold border-2 border-background">
                 <Link to="/catalogo">VER CATÁLOGO COMPLETO</Link>
               </Button>
-              <Button asChild variant="outline" size="xl" className="border-2 border-background text-background hover:bg-background hover:text-cta-primary font-bold">
+              <Button asChild variant="outline" size="xl" className="border-2 border-background text-background hover:bg-background hover:text-cta-primary font-bold bg-transparent">
                 <Link to="/contacto">PEDIDO PERSONALIZADO</Link>
               </Button>
             </div>

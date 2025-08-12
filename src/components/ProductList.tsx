@@ -265,7 +265,7 @@ const ProductList = () => {
             
             <CardFooter className="p-4 pt-0 space-y-3">
               <div className="w-full flex items-center justify-center">
-                <span className="text-2xl font-bold text-primary">
+                <span className="text-2xl font-bold text-price-highlight">
                   {formatPrice(producto.precio)}
                 </span>
               </div>
