@@ -29,69 +29,78 @@ const OrderManagement = () => {
   const updateOrderStatus = async (orderId: number, newStatus: string) => {
     setUpdating(orderId);
     try {
-      console.log('Intentando actualizar pedido:', orderId, 'a estado:', newStatus);
+      console.log('🔄 Intentando actualizar pedido:', orderId, 'a estado:', newStatus);
       
       // Verificar autenticación
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
+        console.error('❌ Usuario no autenticado');
         toast.error('Debes estar autenticado para actualizar pedidos');
         setUpdating(null);
         return;
       }
       
-      console.log('Usuario autenticado:', user.email);
+      console.log('✅ Usuario autenticado:', user.email, 'ID:', user.id);
       
-      // Intentar actualización directa con bypass de RLS usando service_role si es posible
+      // Intentar actualización directa
       const { data, error } = await supabase
         .from('pedidos')
         .update({ estado: newStatus })
         .eq('id', orderId)
         .select();
 
+      console.log('📝 Respuesta de actualización:', { data, error });
+
       if (error) {
-        console.error('Error de Supabase:', error);
+        console.error('❌ Error directo de Supabase:', error);
         throw error;
       }
       
-      // Si no se devolvieron datos, significa que RLS bloqueó la actualización
       if (!data || data.length === 0) {
-        console.warn('RLS bloqueó la actualización - datos vacíos devueltos');
+        console.warn('⚠️ Actualización bloqueada por RLS - array vacío retornado');
         
-        // Verificar si realmente se actualizó consultando directamente
+        // Verificar el estado actual después del intento
         const { data: checkData, error: checkError } = await supabase
           .from('pedidos')
-          .select('estado')
+          .select('estado, id')
           .eq('id', orderId)
           .single();
           
+        console.log('🔍 Verificación post-actualización:', { checkData, checkError });
+        
         if (checkError) {
-          throw new Error('No se pudo verificar el estado de actualización');
+          throw new Error(`Error verificando actualización: ${checkError.message}`);
         }
         
         if (checkData.estado === newStatus) {
-          console.log('Actualización exitosa verificada');
+          console.log('✅ Actualización fue exitosa a pesar del array vacío');
           toast.success(`Pedido #${orderId} actualizado a ${newStatus}`);
           fetchOrders();
         } else {
-          throw new Error('La actualización fue bloqueada por políticas de seguridad. Contacta al administrador del sistema.');
+          console.error('❌ La actualización fue bloqueada completamente');
+          throw new Error('Error de permisos: Las políticas de seguridad de la base de datos no permiten esta actualización. Es necesario configurar los permisos administrativos en Supabase.');
         }
       } else {
-        console.log('Actualización exitosa:', data);
+        console.log('✅ Actualización exitosa con datos:', data);
         toast.success(`Pedido #${orderId} actualizado a ${newStatus}`);
         fetchOrders();
       }
     } catch (error: any) {
-      console.error('Error updating order status:', error);
+      console.error('💥 Error completo actualizando estado del pedido:', error);
       
-      // Manejo específico de errores
+      // Manejo específico de errores con logging detallado
       if (error.code === 'PGRST301') {
-        toast.error('No tienes permisos para actualizar este pedido');
+        console.error('🚫 Error PGRST301 - Sin permisos');
+        toast.error('Sin permisos para actualizar este pedido');
       } else if (error.code === 'PGRST116') {
-        toast.error('No se encontró el pedido especificado');
-      } else if (error.message?.includes('RLS')) {
-        toast.error('Política de seguridad: No autorizado para esta operación');
+        console.error('🔍 Error PGRST116 - Pedido no encontrado');
+        toast.error('Pedido no encontrado');
+      } else if (error.message?.includes('RLS') || error.message?.includes('política') || error.message?.includes('permission')) {
+        console.error('🔒 Error de políticas RLS');
+        toast.error('Error de permisos: Contacta al administrador para habilitar la gestión de pedidos');
       } else {
-        toast.error(`Error al actualizar: ${error.message || 'Error desconocido'}`);
+        console.error('❓ Error desconocido:', error.message);
+        toast.error(`Error: ${error.message || 'Error desconocido al actualizar'}`);
       }
     }
     setUpdating(null);
