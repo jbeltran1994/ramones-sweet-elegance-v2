@@ -165,7 +165,7 @@ const Contacto = () => {
                 <div>
                   <h3 className="font-elegant font-semibold mb-1">Ubicación</h3>
                   <p className="text-muted-foreground">
-                    La vecindad<br />
+                    Avenida Siempreviva 742,<br />
                     Montevideo, Uruguay
                   </p>
                 </div>
