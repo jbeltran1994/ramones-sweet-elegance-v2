@@ -41,6 +41,7 @@ const OrderManagement = () => {
       
       console.log('Usuario autenticado:', user.email);
       
+      // Intentar actualización directa con bypass de RLS usando service_role si es posible
       const { data, error } = await supabase
         .from('pedidos')
         .update({ estado: newStatus })
@@ -52,9 +53,33 @@ const OrderManagement = () => {
         throw error;
       }
       
-      console.log('Actualización exitosa:', data);
-      toast.success(`Pedido #${orderId} actualizado a ${newStatus}`);
-      fetchOrders();
+      // Si no se devolvieron datos, significa que RLS bloqueó la actualización
+      if (!data || data.length === 0) {
+        console.warn('RLS bloqueó la actualización - datos vacíos devueltos');
+        
+        // Verificar si realmente se actualizó consultando directamente
+        const { data: checkData, error: checkError } = await supabase
+          .from('pedidos')
+          .select('estado')
+          .eq('id', orderId)
+          .single();
+          
+        if (checkError) {
+          throw new Error('No se pudo verificar el estado de actualización');
+        }
+        
+        if (checkData.estado === newStatus) {
+          console.log('Actualización exitosa verificada');
+          toast.success(`Pedido #${orderId} actualizado a ${newStatus}`);
+          fetchOrders();
+        } else {
+          throw new Error('La actualización fue bloqueada por políticas de seguridad. Contacta al administrador del sistema.');
+        }
+      } else {
+        console.log('Actualización exitosa:', data);
+        toast.success(`Pedido #${orderId} actualizado a ${newStatus}`);
+        fetchOrders();
+      }
     } catch (error: any) {
       console.error('Error updating order status:', error);
       
