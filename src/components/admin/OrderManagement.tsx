@@ -29,18 +29,45 @@ const OrderManagement = () => {
   const updateOrderStatus = async (orderId: number, newStatus: string) => {
     setUpdating(orderId);
     try {
-      const { error } = await supabase
+      console.log('Intentando actualizar pedido:', orderId, 'a estado:', newStatus);
+      
+      // Verificar autenticación
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error('Debes estar autenticado para actualizar pedidos');
+        setUpdating(null);
+        return;
+      }
+      
+      console.log('Usuario autenticado:', user.email);
+      
+      const { data, error } = await supabase
         .from('pedidos')
         .update({ estado: newStatus })
-        .eq('id', orderId);
+        .eq('id', orderId)
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error de Supabase:', error);
+        throw error;
+      }
       
+      console.log('Actualización exitosa:', data);
       toast.success(`Pedido #${orderId} actualizado a ${newStatus}`);
       fetchOrders();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating order status:', error);
-      toast.error('Error al actualizar el estado del pedido');
+      
+      // Manejo específico de errores
+      if (error.code === 'PGRST301') {
+        toast.error('No tienes permisos para actualizar este pedido');
+      } else if (error.code === 'PGRST116') {
+        toast.error('No se encontró el pedido especificado');
+      } else if (error.message?.includes('RLS')) {
+        toast.error('Política de seguridad: No autorizado para esta operación');
+      } else {
+        toast.error(`Error al actualizar: ${error.message || 'Error desconocido'}`);
+      }
     }
     setUpdating(null);
   };
