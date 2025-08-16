@@ -1,3 +1,4 @@
+
 -- Script SQL para agregar políticas administrativas a Supabase
 -- Ejecutar este script en el SQL Editor de Supabase
 
@@ -8,6 +9,9 @@ DROP POLICY IF EXISTS "Authenticated users can delete any order for admin" ON pu
 DROP POLICY IF EXISTS "Authenticated users can view all order items for admin" ON public.items_pedido;
 DROP POLICY IF EXISTS "Authenticated users can update any order items for admin" ON public.items_pedido;
 DROP POLICY IF EXISTS "Authenticated users can delete any order items for admin" ON public.items_pedido;
+DROP POLICY IF EXISTS "Authenticated users can view all users for admin" ON public.usuarios;
+DROP POLICY IF EXISTS "Authenticated users can update any user for admin" ON public.usuarios;
+DROP POLICY IF EXISTS "Authenticated users can delete any user for admin" ON public.usuarios;
 
 -- Crear políticas para que usuarios autenticados puedan gestionar todos los pedidos
 CREATE POLICY "Admin can view all orders" 
@@ -49,6 +53,26 @@ FOR DELETE
 TO authenticated 
 USING (true);
 
+-- Crear políticas para usuarios
+CREATE POLICY "Admin can view all users" 
+ON public.usuarios 
+FOR SELECT 
+TO authenticated 
+USING (true);
+
+CREATE POLICY "Admin can update any user" 
+ON public.usuarios 
+FOR UPDATE 
+TO authenticated 
+USING (true)
+WITH CHECK (true);
+
+CREATE POLICY "Admin can delete any user" 
+ON public.usuarios 
+FOR DELETE 
+TO authenticated 
+USING (true);
+
 -- Verificar que las políticas se crearon correctamente
 SELECT 
     schemaname,
@@ -60,5 +84,5 @@ SELECT
     qual,
     with_check
 FROM pg_policies 
-WHERE tablename IN ('pedidos', 'items_pedido')
+WHERE tablename IN ('pedidos', 'items_pedido', 'usuarios')
 ORDER BY tablename, policyname;

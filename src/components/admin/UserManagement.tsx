@@ -1,21 +1,23 @@
+
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, Mail, Calendar, UserCheck } from "lucide-react";
+import { Users, Mail, Calendar, UserCheck, AlertCircle } from "lucide-react";
 
 interface User {
   id: number;
   nombre: string;
   email: string;
-  telefono: string;
+  telefono: string | null;
   fecha_registro: string;
-  auth_id: string;
+  auth_id: string | null;
 }
 
 const UserManagement = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchUsers();
@@ -23,18 +25,39 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     setLoading(true);
+    setError(null);
+    
     try {
-      const { data, error } = await supabase
+      console.log('Fetching users from Supabase...');
+      
+      const { data, error, count } = await supabase
         .from('usuarios')
-        .select('*')
+        .select('*', { count: 'exact' })
         .order('fecha_registro', { ascending: false });
 
-      if (error) throw error;
-      setUsers(data || []);
+      console.log('Supabase response:', { data, error, count });
+
+      if (error) {
+        console.error('Supabase error:', error);
+        setError(`Error de base de datos: ${error.message}`);
+        return;
+      }
+
+      if (!data) {
+        console.log('No data returned from Supabase');
+        setUsers([]);
+        return;
+      }
+
+      console.log(`Successfully fetched ${data.length} users`);
+      setUsers(data);
+      
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('Unexpected error fetching users:', error);
+      setError('Error inesperado al cargar los usuarios');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const formatDate = (dateString: string) => {
@@ -57,6 +80,21 @@ const UserManagement = () => {
     );
   }
 
+  if (error) {
+    return (
+      <Card className="p-6">
+        <div className="text-center py-12">
+          <AlertCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Error al cargar usuarios</h3>
+          <p className="text-muted-foreground mb-4">{error}</p>
+          <p className="text-sm text-muted-foreground">
+            Asegúrate de que las políticas RLS estén configuradas correctamente en Supabase.
+          </p>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <Card className="p-6 bg-gradient-card shadow-elegant">
@@ -74,7 +112,10 @@ const UserManagement = () => {
           <div className="text-center py-12">
             <Users className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No hay usuarios registrados</h3>
-            <p className="text-muted-foreground">Los usuarios aparecerán aquí cuando se registren en la aplicación.</p>
+            <p className="text-muted-foreground mb-2">Los usuarios aparecerán aquí cuando se registren en la aplicación.</p>
+            <p className="text-sm text-muted-foreground">
+              Si esperas ver usuarios pero no aparecen, verifica las políticas RLS en Supabase.
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -112,6 +153,11 @@ const UserManagement = () => {
                     <p className="text-xs text-muted-foreground mt-1">
                       ID: {user.id}
                     </p>
+                    {user.auth_id && (
+                      <p className="text-xs text-muted-foreground">
+                        Auth: {user.auth_id.substring(0, 8)}...
+                      </p>
+                    )}
                   </div>
                 </div>
               </Card>
